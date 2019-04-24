@@ -1,0 +1,6 @@
+---
+modules:
+  sensorsgateway:
+    walk:
+    - 1.3.6.1.4.1.17095.6 # Inputs
+    - 1.3.6.1.4.1.17095.11 # Sensors
