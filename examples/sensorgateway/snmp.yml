@@ -1,0 +1,838 @@
+# WARNING: This file was auto-generated using snmp_exporter generator, manual changes will be lost.
+sensorsgateway:
+  walk:
+  - 1.3.6.1.4.1.17095.11
+  - 1.3.6.1.4.1.17095.6
+  metrics:
+  - name: sensor1Name
+    oid: 1.3.6.1.4.1.17095.11.1.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.1.1'
+  - name: sensor1value
+    oid: 1.3.6.1.4.1.17095.11.1.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.1.2'
+  - name: sensor1ErrState
+    oid: 1.3.6.1.4.1.17095.11.1.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.1.3'
+  - name: sensor1lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.1.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.1.4'
+  - name: sensor1lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.1.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.1.5'
+  - name: sensor2Name
+    oid: 1.3.6.1.4.1.17095.11.2.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.2.1'
+  - name: sensor2value
+    oid: 1.3.6.1.4.1.17095.11.2.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.2.2'
+  - name: sensor2ErrState
+    oid: 1.3.6.1.4.1.17095.11.2.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.2.3'
+  - name: sensor2lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.2.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.2.4'
+  - name: sensor2lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.2.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.2.5'
+  - name: sensor3Name
+    oid: 1.3.6.1.4.1.17095.11.3.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.3.1'
+  - name: sensor3value
+    oid: 1.3.6.1.4.1.17095.11.3.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.3.2'
+  - name: sensor3ErrState
+    oid: 1.3.6.1.4.1.17095.11.3.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.3.3'
+  - name: sensor3lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.3.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.3.4'
+  - name: sensor3lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.3.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.3.5'
+  - name: sensor4Name
+    oid: 1.3.6.1.4.1.17095.11.4.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.4.1'
+  - name: sensor4value
+    oid: 1.3.6.1.4.1.17095.11.4.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.4.2'
+  - name: sensor4ErrState
+    oid: 1.3.6.1.4.1.17095.11.4.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.4.3'
+  - name: sensor4lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.4.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.4.4'
+  - name: sensor4lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.4.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.4.5'
+  - name: sensor5Name
+    oid: 1.3.6.1.4.1.17095.11.5.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.5.1'
+  - name: sensor5value
+    oid: 1.3.6.1.4.1.17095.11.5.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.5.2'
+  - name: sensor5ErrState
+    oid: 1.3.6.1.4.1.17095.11.5.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.5.3'
+  - name: sensor5lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.5.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.5.4'
+  - name: sensor5lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.5.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.5.5'
+  - name: sensor6Name
+    oid: 1.3.6.1.4.1.17095.11.6.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.6.1'
+  - name: sensor6value
+    oid: 1.3.6.1.4.1.17095.11.6.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.6.2'
+  - name: sensor6ErrState
+    oid: 1.3.6.1.4.1.17095.11.6.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.6.3'
+  - name: sensor6lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.6.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.6.4'
+  - name: sensor6lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.6.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.6.5'
+  - name: sensor7Name
+    oid: 1.3.6.1.4.1.17095.11.7.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.7.1'
+  - name: sensor7value
+    oid: 1.3.6.1.4.1.17095.11.7.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.7.2'
+  - name: sensor7ErrState
+    oid: 1.3.6.1.4.1.17095.11.7.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.7.3'
+  - name: sensor7lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.7.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.7.4'
+  - name: sensor7lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.7.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.7.5'
+  - name: sensor8Name
+    oid: 1.3.6.1.4.1.17095.11.8.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.8.1'
+  - name: sensor8value
+    oid: 1.3.6.1.4.1.17095.11.8.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.8.2'
+  - name: sensor8ErrState
+    oid: 1.3.6.1.4.1.17095.11.8.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.8.3'
+  - name: sensor8lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.8.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.8.4'
+  - name: sensor8lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.8.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.8.5'
+  - name: sensor9Name
+    oid: 1.3.6.1.4.1.17095.11.9.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.9.1'
+  - name: sensor9value
+    oid: 1.3.6.1.4.1.17095.11.9.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.9.2'
+  - name: sensor9ErrState
+    oid: 1.3.6.1.4.1.17095.11.9.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.9.3'
+  - name: sensor9lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.9.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.9.4'
+  - name: sensor9lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.9.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.9.5'
+  - name: sensor10Name
+    oid: 1.3.6.1.4.1.17095.11.10.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.10.1'
+  - name: sensor10value
+    oid: 1.3.6.1.4.1.17095.11.10.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.10.2'
+  - name: sensor10ErrState
+    oid: 1.3.6.1.4.1.17095.11.10.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.10.3'
+  - name: sensor10lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.10.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.10.4'
+  - name: sensor10lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.10.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.10.5'
+  - name: sensor11Name
+    oid: 1.3.6.1.4.1.17095.11.11.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.11.1'
+  - name: sensor11value
+    oid: 1.3.6.1.4.1.17095.11.11.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.11.2'
+  - name: sensor11ErrState
+    oid: 1.3.6.1.4.1.17095.11.11.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.11.3'
+  - name: sensor11lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.11.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.11.4'
+  - name: sensor11lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.11.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.11.5'
+  - name: sensor12Name
+    oid: 1.3.6.1.4.1.17095.11.12.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.12.1'
+  - name: sensor12value
+    oid: 1.3.6.1.4.1.17095.11.12.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.12.2'
+  - name: sensor12ErrState
+    oid: 1.3.6.1.4.1.17095.11.12.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.12.3'
+  - name: sensor12lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.12.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.12.4'
+  - name: sensor12lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.12.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.12.5'
+  - name: sensor13Name
+    oid: 1.3.6.1.4.1.17095.11.13.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.13.1'
+  - name: sensor13value
+    oid: 1.3.6.1.4.1.17095.11.13.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.13.2'
+  - name: sensor13ErrState
+    oid: 1.3.6.1.4.1.17095.11.13.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.13.3'
+  - name: sensor13lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.13.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.13.4'
+  - name: sensor13lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.13.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.13.5'
+  - name: sensor14Name
+    oid: 1.3.6.1.4.1.17095.11.14.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.14.1'
+  - name: sensor14value
+    oid: 1.3.6.1.4.1.17095.11.14.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.14.2'
+  - name: sensor14ErrState
+    oid: 1.3.6.1.4.1.17095.11.14.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.14.3'
+  - name: sensor14lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.14.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.14.4'
+  - name: sensor14lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.14.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.14.5'
+  - name: sensor15Name
+    oid: 1.3.6.1.4.1.17095.11.15.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.15.1'
+  - name: sensor15value
+    oid: 1.3.6.1.4.1.17095.11.15.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.15.2'
+  - name: sensor15ErrState
+    oid: 1.3.6.1.4.1.17095.11.15.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.15.3'
+  - name: sensor15lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.15.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.15.4'
+  - name: sensor15lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.15.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.15.5'
+  - name: sensor16Name
+    oid: 1.3.6.1.4.1.17095.11.16.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.16.1'
+  - name: sensor16value
+    oid: 1.3.6.1.4.1.17095.11.16.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.16.2'
+  - name: sensor16ErrState
+    oid: 1.3.6.1.4.1.17095.11.16.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.16.3'
+  - name: sensor16lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.16.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.16.4'
+  - name: sensor16lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.16.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.16.5'
+  - name: sensor17Name
+    oid: 1.3.6.1.4.1.17095.11.17.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.17.1'
+  - name: sensor17value
+    oid: 1.3.6.1.4.1.17095.11.17.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.17.2'
+  - name: sensor17ErrState
+    oid: 1.3.6.1.4.1.17095.11.17.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.17.3'
+  - name: sensor17lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.17.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.17.4'
+  - name: sensor17lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.17.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.17.5'
+  - name: sensor18Name
+    oid: 1.3.6.1.4.1.17095.11.18.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.18.1'
+  - name: sensor18value
+    oid: 1.3.6.1.4.1.17095.11.18.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.18.2'
+  - name: sensor18ErrState
+    oid: 1.3.6.1.4.1.17095.11.18.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.18.3'
+  - name: sensor18lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.18.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.18.4'
+  - name: sensor18lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.18.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.18.5'
+  - name: sensor19Name
+    oid: 1.3.6.1.4.1.17095.11.19.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.19.1'
+  - name: sensor19value
+    oid: 1.3.6.1.4.1.17095.11.19.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.19.2'
+  - name: sensor19ErrState
+    oid: 1.3.6.1.4.1.17095.11.19.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.19.3'
+  - name: sensor19lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.19.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.19.4'
+  - name: sensor19lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.19.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.19.5'
+  - name: sensor20Name
+    oid: 1.3.6.1.4.1.17095.11.20.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.20.1'
+  - name: sensor20value
+    oid: 1.3.6.1.4.1.17095.11.20.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.20.2'
+  - name: sensor20ErrState
+    oid: 1.3.6.1.4.1.17095.11.20.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.20.3'
+  - name: sensor20lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.20.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.20.4'
+  - name: sensor20lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.20.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.20.5'
+  - name: sensor21Name
+    oid: 1.3.6.1.4.1.17095.11.21.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.21.1'
+  - name: sensor21value
+    oid: 1.3.6.1.4.1.17095.11.21.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.21.2'
+  - name: sensor21ErrState
+    oid: 1.3.6.1.4.1.17095.11.21.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.21.3'
+  - name: sensor21lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.21.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.21.4'
+  - name: sensor21lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.21.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.21.5'
+  - name: sensor22Name
+    oid: 1.3.6.1.4.1.17095.11.22.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.22.1'
+  - name: sensor22value
+    oid: 1.3.6.1.4.1.17095.11.22.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.22.2'
+  - name: sensor22ErrState
+    oid: 1.3.6.1.4.1.17095.11.22.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.22.3'
+  - name: sensor22lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.22.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.22.4'
+  - name: sensor22lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.22.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.22.5'
+  - name: sensor23Name
+    oid: 1.3.6.1.4.1.17095.11.23.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.23.1'
+  - name: sensor23value
+    oid: 1.3.6.1.4.1.17095.11.23.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.23.2'
+  - name: sensor23ErrState
+    oid: 1.3.6.1.4.1.17095.11.23.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.23.3'
+  - name: sensor23lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.23.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.23.4'
+  - name: sensor23lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.23.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.23.5'
+  - name: sensor24Name
+    oid: 1.3.6.1.4.1.17095.11.24.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.24.1'
+  - name: sensor24value
+    oid: 1.3.6.1.4.1.17095.11.24.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.24.2'
+  - name: sensor24ErrState
+    oid: 1.3.6.1.4.1.17095.11.24.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.24.3'
+  - name: sensor24lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.24.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.24.4'
+  - name: sensor24lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.24.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.24.5'
+  - name: sensor25Name
+    oid: 1.3.6.1.4.1.17095.11.25.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.25.1'
+  - name: sensor25value
+    oid: 1.3.6.1.4.1.17095.11.25.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.25.2'
+  - name: sensor25ErrState
+    oid: 1.3.6.1.4.1.17095.11.25.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.25.3'
+  - name: sensor25lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.25.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.25.4'
+  - name: sensor25lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.25.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.25.5'
+  - name: sensor26Name
+    oid: 1.3.6.1.4.1.17095.11.26.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.26.1'
+  - name: sensor26value
+    oid: 1.3.6.1.4.1.17095.11.26.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.26.2'
+  - name: sensor26ErrState
+    oid: 1.3.6.1.4.1.17095.11.26.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.26.3'
+  - name: sensor26lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.26.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.26.4'
+  - name: sensor26lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.26.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.26.5'
+  - name: sensor27Name
+    oid: 1.3.6.1.4.1.17095.11.27.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.27.1'
+  - name: sensor27value
+    oid: 1.3.6.1.4.1.17095.11.27.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.27.2'
+  - name: sensor27ErrState
+    oid: 1.3.6.1.4.1.17095.11.27.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.27.3'
+  - name: sensor27lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.27.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.27.4'
+  - name: sensor27lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.27.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.27.5'
+  - name: sensor28Name
+    oid: 1.3.6.1.4.1.17095.11.28.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.28.1'
+  - name: sensor28value
+    oid: 1.3.6.1.4.1.17095.11.28.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.28.2'
+  - name: sensor28ErrState
+    oid: 1.3.6.1.4.1.17095.11.28.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.28.3'
+  - name: sensor28lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.28.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.28.4'
+  - name: sensor28lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.28.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.28.5'
+  - name: sensor29Name
+    oid: 1.3.6.1.4.1.17095.11.29.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.29.1'
+  - name: sensor29value
+    oid: 1.3.6.1.4.1.17095.11.29.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.29.2'
+  - name: sensor29ErrState
+    oid: 1.3.6.1.4.1.17095.11.29.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.29.3'
+  - name: sensor29lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.29.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.29.4'
+  - name: sensor29lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.29.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.29.5'
+  - name: sensor30Name
+    oid: 1.3.6.1.4.1.17095.11.30.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.30.1'
+  - name: sensor30value
+    oid: 1.3.6.1.4.1.17095.11.30.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.30.2'
+  - name: sensor30ErrState
+    oid: 1.3.6.1.4.1.17095.11.30.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.30.3'
+  - name: sensor30lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.30.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.30.4'
+  - name: sensor30lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.30.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.30.5'
+  - name: sensor31Name
+    oid: 1.3.6.1.4.1.17095.11.31.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.31.1'
+  - name: sensor31value
+    oid: 1.3.6.1.4.1.17095.11.31.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.31.2'
+  - name: sensor31ErrState
+    oid: 1.3.6.1.4.1.17095.11.31.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.31.3'
+  - name: sensor31lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.31.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.31.4'
+  - name: sensor31lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.31.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.31.5'
+  - name: sensor32Name
+    oid: 1.3.6.1.4.1.17095.11.32.1
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.32.1'
+  - name: sensor32value
+    oid: 1.3.6.1.4.1.17095.11.32.2
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.32.2'
+  - name: sensor32ErrState
+    oid: 1.3.6.1.4.1.17095.11.32.3
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.32.3'
+  - name: sensor32lastErrTime
+    oid: 1.3.6.1.4.1.17095.11.32.4
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.32.4'
+  - name: sensor32lastErrMsg
+    oid: 1.3.6.1.4.1.17095.11.32.5
+    type: DisplayString
+    help: ' - 1.3.6.1.4.1.17095.11.32.5'
+  - name: input1name
+    oid: 1.3.6.1.4.1.17095.6.1
+    type: DisplayString
+    help: Name - 1.3.6.1.4.1.17095.6.1
+  - name: input1Value
+    oid: 1.3.6.1.4.1.17095.6.2
+    type: DisplayString
+    help: State - O for Open and 1 for Close - 1.3.6.1.4.1.17095.6.2
+  - name: input1LastErrMsg
+    oid: 1.3.6.1.4.1.17095.6.3
+    type: DisplayString
+    help: Last error message of input - 1.3.6.1.4.1.17095.6.3
+  - name: input2name
+    oid: 1.3.6.1.4.1.17095.6.4
+    type: DisplayString
+    help: Name - 1.3.6.1.4.1.17095.6.4
+  - name: input2Value
+    oid: 1.3.6.1.4.1.17095.6.5
+    type: DisplayString
+    help: State - O for Open and 1 for Close - 1.3.6.1.4.1.17095.6.5
+  - name: input2LastErrMsg
+    oid: 1.3.6.1.4.1.17095.6.6
+    type: DisplayString
+    help: Last error message of input - 1.3.6.1.4.1.17095.6.6
+  - name: input3name
+    oid: 1.3.6.1.4.1.17095.6.7
+    type: DisplayString
+    help: Name - 1.3.6.1.4.1.17095.6.7
+  - name: input3Value
+    oid: 1.3.6.1.4.1.17095.6.8
+    type: DisplayString
+    help: State - O for Open and 1 for Close - 1.3.6.1.4.1.17095.6.8
+  - name: input3LastErrMsg
+    oid: 1.3.6.1.4.1.17095.6.9
+    type: DisplayString
+    help: Last error message of input - 1.3.6.1.4.1.17095.6.9
+  - name: input4name
+    oid: 1.3.6.1.4.1.17095.6.10
+    type: DisplayString
+    help: Name - 1.3.6.1.4.1.17095.6.10
+  - name: input4Value
+    oid: 1.3.6.1.4.1.17095.6.11
+    type: DisplayString
+    help: State - O for Open and 1 for Close - 1.3.6.1.4.1.17095.6.11
+  - name: input4LastErrMsg
+    oid: 1.3.6.1.4.1.17095.6.12
+    type: DisplayString
+    help: Last error message of input - 1.3.6.1.4.1.17095.6.12
+  - name: input5name
+    oid: 1.3.6.1.4.1.17095.6.13
+    type: DisplayString
+    help: Name - 1.3.6.1.4.1.17095.6.13
+  - name: input5Value
+    oid: 1.3.6.1.4.1.17095.6.14
+    type: DisplayString
+    help: State - O for Open and 1 for Close - 1.3.6.1.4.1.17095.6.14
+  - name: input5LastErrMsg
+    oid: 1.3.6.1.4.1.17095.6.15
+    type: DisplayString
+    help: Last error message of input - 1.3.6.1.4.1.17095.6.15
+  - name: input6name
+    oid: 1.3.6.1.4.1.17095.6.16
+    type: DisplayString
+    help: Name - 1.3.6.1.4.1.17095.6.16
+  - name: input6Value
+    oid: 1.3.6.1.4.1.17095.6.17
+    type: DisplayString
+    help: State - O for Open and 1 for Close - 1.3.6.1.4.1.17095.6.17
+  - name: input6LastErrMsg
+    oid: 1.3.6.1.4.1.17095.6.18
+    type: DisplayString
+    help: Last error message of input - 1.3.6.1.4.1.17095.6.18
+  - name: input7name
+    oid: 1.3.6.1.4.1.17095.6.19
+    type: DisplayString
+    help: Name - 1.3.6.1.4.1.17095.6.19
+  - name: input7Value
+    oid: 1.3.6.1.4.1.17095.6.20
+    type: DisplayString
+    help: State - O for Open and 1 for Close - 1.3.6.1.4.1.17095.6.20
+  - name: input7LastErrMsg
+    oid: 1.3.6.1.4.1.17095.6.21
+    type: DisplayString
+    help: Last error message of input - 1.3.6.1.4.1.17095.6.21
+  - name: input8name
+    oid: 1.3.6.1.4.1.17095.6.22
+    type: DisplayString
+    help: Name - 1.3.6.1.4.1.17095.6.22
+  - name: input8Value
+    oid: 1.3.6.1.4.1.17095.6.23
+    type: DisplayString
+    help: State - O for Open and 1 for Close - 1.3.6.1.4.1.17095.6.23
+  - name: input8LastErrMsg
+    oid: 1.3.6.1.4.1.17095.6.24
+    type: DisplayString
+    help: Last error message of input - 1.3.6.1.4.1.17095.6.24
+  - name: input9name
+    oid: 1.3.6.1.4.1.17095.6.25
+    type: DisplayString
+    help: Name - 1.3.6.1.4.1.17095.6.25
+  - name: input9Value
+    oid: 1.3.6.1.4.1.17095.6.26
+    type: DisplayString
+    help: State - O for Open and 1 for Close - 1.3.6.1.4.1.17095.6.26
+  - name: input9LastErrMsg
+    oid: 1.3.6.1.4.1.17095.6.27
+    type: DisplayString
+    help: Last error message of input - 1.3.6.1.4.1.17095.6.27
+  - name: input10name
+    oid: 1.3.6.1.4.1.17095.6.28
+    type: DisplayString
+    help: Name - 1.3.6.1.4.1.17095.6.28
+  - name: input10Value
+    oid: 1.3.6.1.4.1.17095.6.29
+    type: DisplayString
+    help: State - O for Open and 1 for Close - 1.3.6.1.4.1.17095.6.29
+  - name: input10LastErrMsg
+    oid: 1.3.6.1.4.1.17095.6.30
+    type: DisplayString
+    help: Last error message of input - 1.3.6.1.4.1.17095.6.30
+  - name: input11name
+    oid: 1.3.6.1.4.1.17095.6.31
+    type: DisplayString
+    help: Name - 1.3.6.1.4.1.17095.6.31
+  - name: input11Value
+    oid: 1.3.6.1.4.1.17095.6.32
+    type: DisplayString
+    help: State - O for Open and 1 for Close - 1.3.6.1.4.1.17095.6.32
+  - name: input11LastErrMsg
+    oid: 1.3.6.1.4.1.17095.6.33
+    type: DisplayString
+    help: Last error message of input - 1.3.6.1.4.1.17095.6.33
+  - name: input12name
+    oid: 1.3.6.1.4.1.17095.6.34
+    type: DisplayString
+    help: Name - 1.3.6.1.4.1.17095.6.34
+  - name: input12Value
+    oid: 1.3.6.1.4.1.17095.6.35
+    type: DisplayString
+    help: State - O for Open and 1 for Close - 1.3.6.1.4.1.17095.6.35
+  - name: input12LastErrMsg
+    oid: 1.3.6.1.4.1.17095.6.36
+    type: DisplayString
+    help: Last error message of input - 1.3.6.1.4.1.17095.6.36
+  - name: input13name
+    oid: 1.3.6.1.4.1.17095.6.37
+    type: DisplayString
+    help: Name - 1.3.6.1.4.1.17095.6.37
+  - name: input13Value
+    oid: 1.3.6.1.4.1.17095.6.38
+    type: DisplayString
+    help: State - O for Open and 1 for Close - 1.3.6.1.4.1.17095.6.38
+  - name: input13LastErrMsg
+    oid: 1.3.6.1.4.1.17095.6.39
+    type: DisplayString
+    help: Last error message of input - 1.3.6.1.4.1.17095.6.39
+  - name: input14name
+    oid: 1.3.6.1.4.1.17095.6.40
+    type: DisplayString
+    help: Name - 1.3.6.1.4.1.17095.6.40
+  - name: input14Value
+    oid: 1.3.6.1.4.1.17095.6.41
+    type: DisplayString
+    help: State - O for Open and 1 for Close - 1.3.6.1.4.1.17095.6.41
+  - name: input14LastErrMsg
+    oid: 1.3.6.1.4.1.17095.6.42
+    type: DisplayString
+    help: Last error message of input - 1.3.6.1.4.1.17095.6.42
+  - name: input15name
+    oid: 1.3.6.1.4.1.17095.6.43
+    type: DisplayString
+    help: Name - 1.3.6.1.4.1.17095.6.43
+  - name: input15Value
+    oid: 1.3.6.1.4.1.17095.6.44
+    type: DisplayString
+    help: State - O for Open and 1 for Close - 1.3.6.1.4.1.17095.6.44
+  - name: input15LastErrMsg
+    oid: 1.3.6.1.4.1.17095.6.45
+    type: DisplayString
+    help: Last error message of input - 1.3.6.1.4.1.17095.6.45
+  - name: input16name
+    oid: 1.3.6.1.4.1.17095.6.46
+    type: DisplayString
+    help: Name - 1.3.6.1.4.1.17095.6.46
+  - name: input16Value
+    oid: 1.3.6.1.4.1.17095.6.47
+    type: DisplayString
+    help: State - O for Open and 1 for Close - 1.3.6.1.4.1.17095.6.47
+  - name: input16LastErrMsg
+    oid: 1.3.6.1.4.1.17095.6.48
+    type: DisplayString
+    help: Last error message of input - 1.3.6.1.4.1.17095.6.48
