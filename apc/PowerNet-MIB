@@ -294,7 +294,7 @@ PowerNet-MIB DEFINITIONS ::= BEGIN
 
 IMPORTS
    enterprises, IpAddress, Gauge, TimeTicks             FROM RFC1155-SMI
-   DisplayString                                        FROM RFC1213-MIB
+   DisplayString                                        FROM SNMPv2-TC
    SnmpAdminString                                      FROM SNMP-FRAMEWORK-MIB
    OBJECT-TYPE                                          FROM RFC-1212
    TRAP-TYPE                                            FROM RFC-1215;
