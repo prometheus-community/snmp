@@ -1,6 +1,13 @@
 --PPC-MIB { iso(1) org(3) dod(6) internet(1) private(4)
 -- enterprises(1) ppc(935) }
 -- Title: PPC TOP LEVEL MIB
+-- Date: January 07, 1994    Version 1.00
+--
+-- Date: January 17, 1994    Version 1.01
+--
+-- Date: July 14, 1994    Version 1.02
+--
+-- Date: May 16, 2003    Version 2.00
 
 XPPC-MIB DEFINITIONS ::= BEGIN
 
@@ -8,14 +15,99 @@ IMPORTS
         TRAP-TYPE
                 FROM RFC-1215
         DisplayString
-                FROM RFC1213-MIB
+                FROM SNMPv2-TC
         OBJECT-TYPE
                 FROM RFC-1212
         enterprises,
         IpAddress
                 FROM RFC1155-SMI;
 
+pcm OBJECT IDENTIFIER 
+   ::= { enterprises 476 }
+   
+pcmproducts OBJECT IDENTIFIER 
+   ::= { pcm 1 }
+   
+pcmhardware OBJECT IDENTIFIER 
+   ::= { pcmproducts 42 }
+   
+pcmdevices OBJECT IDENTIFIER 
+   ::= { pcmhardware 3 }
+   
+pcmEnv OBJECT IDENTIFIER 
+   ::= { pcmdevices 4 }
+   
+pcmUPS OBJECT IDENTIFIER 
+   ::= { pcmdevices 5 }
+   
+pcmEnv1 OBJECT IDENTIFIER 
+   ::= { pcmEnv 1 }
+   
+pcmEnv2 OBJECT IDENTIFIER 
+   ::= { pcmEnv1 3 }
+  
+pcmEnv3 OBJECT IDENTIFIER 
+   ::= { pcmEnv2 3 }
+   
+pcmEnv4 OBJECT IDENTIFIER 
+   ::= { pcmEnv3 1 }
+   
+pcmEnvironment OBJECT IDENTIFIER 
+   ::= { pcmEnv4 3 }
+   
+pcmUPS1 OBJECT IDENTIFIER 
+   ::= { pcmUPS 2 }
+   
+pcmUPS2 OBJECT IDENTIFIER 
+   ::= { pcmUPS1 2 }
+   
+pcmUPS3 OBJECT IDENTIFIER 
+   ::= { pcmUPS2 1 }
+   
+pcmUPS7 OBJECT IDENTIFIER 
+   ::= { pcmUPS3 7 }
+   
+pcmUPS8 OBJECT IDENTIFIER 
+   ::= { pcmUPS3 8 }
+   
+pcmUPS11 OBJECT IDENTIFIER 
+   ::= { pcmUPS3 11 }
+   
+----------------------
 
+pcmEnvTemperature OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS read-only
+        STATUS mandatory
+        DESCRIPTION
+                "The ambient environment temperature."
+   ::= { pcmEnvironment 1 }
+   
+pcmUPSPowerVA OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS read-only
+        STATUS mandatory
+        DESCRIPTION
+                ""
+   ::= { pcmUPS7 3 }
+   
+pcmUPSPowerWatt OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS read-only
+        STATUS mandatory
+        DESCRIPTION
+                ""
+   ::= { pcmUPS8 3 }
+   
+pcmUPSPoweLoad OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS read-only
+        STATUS mandatory
+        DESCRIPTION
+                ""
+   ::= { pcmUPS11 3 }
+
+   
 ppc OBJECT IDENTIFIER 
    ::= { enterprises 935 }
 
@@ -359,6 +451,17 @@ upsBaseBatteryLifeDays OBJECT-TYPE
         DESCRIPTION
                 "Battery Life XX Days."
    ::= { upsBaseBattery 7 }
+   
+upsBaseUPSFault OBJECT-TYPE
+        SYNTAX INTEGER {
+                        unknown(0),
+                        UPS Fault(1),
+                        Normal(2}
+        ACCESS read-only
+        STATUS mandatory
+        DESCRIPTION
+                "UPS Fault."
+   ::= { upsBaseBattery 8 }
 
 -- the upsSmartBattery group
 
