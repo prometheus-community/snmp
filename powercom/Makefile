@@ -21,8 +21,8 @@ XPPC-MIB:
 	@echo ">> Downloading XPPC-MIB"
 	@curl $(CURL_OPTS) -o XPPC-MIB "$(POWERCOM_URL)"
 	# Patch to replace RFC1213-MIB with SNMPv2-TC.
-	@sed -i.bak -z -E 's/(DisplayString[[:space:]\n]+FROM) RFC1213-MIB/\1 SNMPv2-TC/' XPPC-MIB
-	@rm XPPC-MIB.bak
+	@sed -i.bak -E 's/(DisplayString[[:space:]\n]+FROM) RFC1213-MIB/\1 SNMPv2-TC/' XPPC-MIB
+	@rm XPPC-MIB.bak XPPC-MIB.bak2
 
 .PHONY: clean
 clean:
