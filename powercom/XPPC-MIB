@@ -15,7 +15,7 @@ IMPORTS
         TRAP-TYPE
                 FROM RFC-1215
         DisplayString
-                FROM SNMPv2-TC
+                FROM RFC1213-MIB
         OBJECT-TYPE
                 FROM RFC-1212
         enterprises,
@@ -455,8 +455,8 @@ upsBaseBatteryLifeDays OBJECT-TYPE
 upsBaseUPSFault OBJECT-TYPE
         SYNTAX INTEGER {
                         unknown(0),
-                        UPS Fault(1),
-                        Normal(2}
+                        fault(1),
+                        normal(2) }
         ACCESS read-only
         STATUS mandatory
         DESCRIPTION
