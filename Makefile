@@ -15,9 +15,11 @@
 .PHONY: all
 all:
 	@$(MAKE) -C apc
+	@$(MAKE) -C net-snmp
 	@$(MAKE) -C powercom
 
 .PHONY: clean
 clean:
 	@$(MAKE) -C apc clean
+	@$(MAKE) -C net-snmp clean
 	@$(MAKE) -C powercom clean
