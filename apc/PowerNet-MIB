@@ -15684,7 +15684,7 @@ upsHighPrecBatteryPackTableSize OBJECT-TYPE
        DESCRIPTION
                "An entry containing information applicable to a
                particular battery pack."
-       INDEX { upsHighPrecBatteryPackIndex, upsHighPrecBatteryCartridgeIndex }
+       INDEX { upsHighPrecBatteryPackIndex, upsHighPrecBatteryCartridgeIndex, upsHighPrecBatteryExtraIndex }
        ::= { upsHighPrecBatteryPackTable 1 }
 
    UPSHighPrecBatteryPackEntry ::= SEQUENCE {
@@ -15699,6 +15699,15 @@ upsHighPrecBatteryPackTableSize OBJECT-TYPE
        upsHighPrecBatteryPackCartridgeInstallDate  DisplayString,
        upsHighPrecBatteryPackCartridgeStatus       OCTET STRING
    }
+
+   upsHighPrecBatteryExtraIndex OBJECT-TYPE
+       SYNTAX     INTEGER
+       ACCESS     read-only
+       STATUS     mandatory
+       DESCRIPTION
+               "The original MIB includes only 2 indices but the device actually returns 3. The third
+               one always matches the second in my test, so I added this to make snmp-exporter work."
+       ::= { upsHighPrecBatteryPackEntry 2 }
 
    upsHighPrecBatteryPackIndex OBJECT-TYPE
        SYNTAX     INTEGER
