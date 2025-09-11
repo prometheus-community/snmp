@@ -1,0 +1,452 @@
+-- ARISTA-CLB-MIB: Arista CLB information
+-- Copyright (c) 2024 Arista Networks, Inc.  All rights reserved.
+
+ARISTA-CLB-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY, OBJECT-TYPE,
+    Gauge32, Integer32, Counter64,
+    NOTIFICATION-TYPE                  FROM SNMPv2-SMI
+    MODULE-COMPLIANCE, OBJECT-GROUP,
+    NOTIFICATION-GROUP                 FROM SNMPv2-CONF
+    TEXTUAL-CONVENTION, TimeStamp      FROM SNMPv2-TC
+    aristaMibs                         FROM ARISTA-SMI-MIB
+    ifIndex                            FROM IF-MIB;
+
+aristaClbMIB MODULE-IDENTITY
+    LAST-UPDATED "202405200000Z"
+    ORGANIZATION "Arista Networks, Inc."
+    CONTACT-INFO
+        "Arista Networks, Inc.
+
+         Postal: 5453 Great America Parkway
+                 Santa Clara, CA 95054
+
+         Tel: +1 408 547-5500
+
+         E-mail: snmp@arista.com"
+    DESCRIPTION
+            "This MIB module contains information about
+             Cluster Load Balancing (CLB) on Arista devices."
+
+    REVISION    "202405200000Z"
+    DESCRIPTION
+        "Added:
+            aristaClbStatus,
+            aristaClbTotalAllocatedFlows,
+            aristaClbTotalUnallocatedFlows,
+            aristaClbTotalLearnedFlows"
+    REVISION    "202404300000Z"
+    DESCRIPTION
+        "Added:
+             aristaClbPortGroupAllocatedFlowThreshold,
+             aristaClbPortGroupAllocatedFlowAtOrAboveThresholdWarning,
+             aristaClbPortGroupAllocatedFlowBelowThresholdWarning,
+             aristaClbPortGroupAllocatedFlowAtOrAboveLimit,
+             aristaClbPortGroupAllocatedFlowBelowLimit"
+
+    REVISION    "202403190000Z"
+    DESCRIPTION "Initial version."
+    ::= { aristaMibs 36 }
+
+aristaClbMibNotifications OBJECT IDENTIFIER
+    ::= { aristaClbMIB 0 }
+
+aristaClbMibObjects OBJECT IDENTIFIER
+    ::= { aristaClbMIB 1 }
+
+aristaClbMibConformance OBJECT IDENTIFIER
+    ::= { aristaClbMIB 2 }
+    
+-- Textual Conventions --
+AristaClbPortGroupShortName ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "100t"
+    STATUS current
+    DESCRIPTION
+        "Identifier with bounded length, derived from a name that may be
+	 longer. It includes the first 90 characters of the name. If
+	 the name is longer than 90 characters, the identifier contains
+	 a hash of the remaining characters in the name, expressed as
+	 decimal digits.
+	 
+	 For example:
+	   - name 'one-two-three':
+	        identifier 'one-two-three'
+	   - name 'one-two-three...<more characters>...-six-seven':
+                identifier 'one-two-three...<more characters>...-six-se3877954092'"
+    SYNTAX OCTET STRING (SIZE (0..100))
+
+
+-- Objects --
+
+-- CLB Port Group Table --
+aristaClbPortGroupTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF AristaClbPortGroupEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table contains information on CLB port groups."
+    ::= { aristaClbMibObjects 1 }
+
+aristaClbPortGroupEntry OBJECT-TYPE
+    SYNTAX      AristaClbPortGroupEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "Information applicable to a CLB port group."
+    INDEX       { aristaClbPortGroupIndex }
+    ::= { aristaClbPortGroupTable 1 }
+
+AristaClbPortGroupEntry ::= SEQUENCE {
+    -- INDEX
+    aristaClbPortGroupIndex                      AristaClbPortGroupShortName,
+    -- Data
+    aristaClbPortGroupLearnedFlows               Gauge32,
+    aristaClbPortGroupAllocatedFlows             Gauge32,
+    aristaClbPortGroupUnallocatedFlows           Gauge32,
+    aristaClbPortGroupAllocatedFlowLimit         Integer32,
+    aristaClbPortGroupUnmatchedNormalBytes       Counter64,
+    aristaClbPortGroupUnmatchedNormalPackets     Counter64,
+    aristaClbPortGroupUnmatchedOverflowBytes     Counter64,
+    aristaClbPortGroupUnmatchedOverflowPackets   Counter64,
+    aristaClbPortGroupDiscontinuityTime          TimeStamp,
+    aristaClbPortGroupAllocatedFlowThreshold     Integer32
+}
+
+aristaClbPortGroupIndex OBJECT-TYPE
+    SYNTAX       AristaClbPortGroupShortName
+    MAX-ACCESS   not-accessible
+    STATUS       current
+    DESCRIPTION
+        "Bounded-length identifier for a given port group, derived from
+         the port group's name."
+    ::= { aristaClbPortGroupEntry 1 }
+
+aristaClbPortGroupLearnedFlows OBJECT-TYPE
+    SYNTAX       Gauge32
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "Number of learned flows in this port group."
+    ::= { aristaClbPortGroupEntry 2 }
+
+aristaClbPortGroupAllocatedFlows OBJECT-TYPE
+    SYNTAX       Gauge32
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "Number of allocated flows in this port group."
+    ::= { aristaClbPortGroupEntry 3 }
+
+aristaClbPortGroupUnallocatedFlows OBJECT-TYPE
+    SYNTAX       Gauge32
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "Number of unallocated flows in this port group."
+    ::= { aristaClbPortGroupEntry 4 }
+
+aristaClbPortGroupAllocatedFlowLimit OBJECT-TYPE
+    SYNTAX       Integer32
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "Maximum number of allocated flows configured in this port group."
+    ::= { aristaClbPortGroupEntry 5 }
+
+aristaClbPortGroupUnmatchedNormalBytes OBJECT-TYPE
+    SYNTAX       Counter64
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "Number of bytes for unmatched flows in this port group
+         when more flows can be programmed.
+
+         Discontinuities in the value of this counter can occur at
+         re-initialization of the management system, and at other
+         times as indicated by the value of
+         aristaClbPortGroupDiscontinuityTime."
+    ::= { aristaClbPortGroupEntry 6 }
+
+aristaClbPortGroupUnmatchedNormalPackets OBJECT-TYPE
+    SYNTAX       Counter64
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "Number of packets for unmatched flows in this port group
+         when more flows can be programmed.
+
+         Discontinuities in the value of this counter can occur at
+         re-initialization of the management system, and at other
+         times as indicated by the value of
+         aristaClbPortGroupDiscontinuityTime."
+    ::= { aristaClbPortGroupEntry 7 }
+
+aristaClbPortGroupUnmatchedOverflowBytes OBJECT-TYPE
+    SYNTAX       Counter64
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "Number of bytes for unmatched flows in this port group
+         when no more flows can be programmed.
+
+         Discontinuities in the value of this counter can occur at
+         re-initialization of the management system, and at other
+         times as indicated by the value of
+         aristaClbPortGroupDiscontinuityTime."
+    ::= { aristaClbPortGroupEntry 8 }
+
+aristaClbPortGroupUnmatchedOverflowPackets OBJECT-TYPE
+    SYNTAX       Counter64
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "Number of packets for unmatched flows in this port group
+         when no more flows can be programmed.
+
+         Discontinuities in the value of this counter can occur at
+         re-initialization of the management system, and at other
+         times as indicated by the value of
+         aristaClbPortGroupDiscontinuityTime."
+    ::= { aristaClbPortGroupEntry 9 }
+
+aristaClbPortGroupDiscontinuityTime OBJECT-TYPE
+    SYNTAX       TimeStamp
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "The value of sysUpTime on the most recent occasion at which
+         any one or more of the following counters suffered a discontinuity:
+             aristaClbPortGroupUnmatchedNormalBytes
+             aristaClbPortGroupUnmatchedNormalPackets
+             aristaClbPortGroupUnmatchedOverflowBytes
+             aristaClbPortGroupUnmatchedOverflowPackets"
+    ::= { aristaClbPortGroupEntry 10 }
+
+aristaClbPortGroupAllocatedFlowThreshold OBJECT-TYPE
+    SYNTAX       Integer32
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "The threshold for sending the traps:
+             aristaClbPortGroupAllocatedFlowAtOrAboveThresholdWarning
+             aristaClbPortGroupAllocatedFlowBelowThresholdWarning
+         when the value of aristaClbPortGroupAllocatedFlows is at or above this
+         threshold."
+    ::= { aristaClbPortGroupEntry 11 }
+
+-- CLB Port Group Name Mapping Table --
+aristaClbPortGroupNameMappingTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF AristaClbPortGroupNameMappingEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table contains information mapping aristaClbPortGroupIndex
+         to the full port group name."
+    ::= { aristaClbMibObjects 2 }
+
+aristaClbPortGroupNameMappingEntry OBJECT-TYPE
+    SYNTAX      AristaClbPortGroupNameMappingEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "Mapping information applicable to a CLB port group."
+    INDEX       { aristaClbPortGroupIndex }
+    ::= { aristaClbPortGroupNameMappingTable 1 }
+
+AristaClbPortGroupNameMappingEntry ::= SEQUENCE {
+    -- Data
+    aristaClbPortGroupNameMappingFullName          OCTET STRING
+}
+
+aristaClbPortGroupNameMappingFullName OBJECT-TYPE
+    SYNTAX       OCTET STRING
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "The full name of the port group referenced by the
+         aristaClbPortGroupIndex."
+    ::= { aristaClbPortGroupNameMappingEntry 1 }
+
+-- CLB Destination Interface Table --
+aristaClbDestinationInterfaceTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF AristaClbDestinationInterfaceEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table contains information on CLB destination interfaces."
+    ::= { aristaClbMibObjects 3 }
+
+aristaClbDestinationInterfaceEntry OBJECT-TYPE
+    SYNTAX      AristaClbDestinationInterfaceEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "Information applicable to a CLB destination interface."
+    INDEX       { ifIndex }
+    ::= { aristaClbDestinationInterfaceTable 1 }
+
+AristaClbDestinationInterfaceEntry  ::= SEQUENCE {
+    -- Data
+    aristaClbDestinationInterfaceActiveFlows    Gauge32
+}
+
+aristaClbDestinationInterfaceActiveFlows OBJECT-TYPE
+    SYNTAX Gauge32
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "Number of active flows on a destination interface."
+    ::= { aristaClbDestinationInterfaceEntry 1 }
+
+aristaClbStatus OBJECT-TYPE
+    SYNTAX INTEGER {
+        disabled(0),
+        monitor(1),
+        enabled(2)
+    }
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "Current status of CLB."
+    ::= { aristaClbMibObjects 4 }
+
+aristaClbTotalAllocatedFlows OBJECT-TYPE
+    SYNTAX Gauge32
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "Total amount of CLB allocated flows"
+    ::= { aristaClbMibObjects 5 }
+
+aristaClbTotalUnallocatedFlows OBJECT-TYPE
+    SYNTAX Gauge32
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "Total amount of CLB unallocated flows"
+    ::= { aristaClbMibObjects 6 }
+    
+aristaClbTotalLearnedFlows OBJECT-TYPE
+    SYNTAX Gauge32
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "Total amount of CLB learned flows"
+    ::= { aristaClbMibObjects 7 }
+    
+-- Notifications --
+aristaClbPortGroupAllocatedFlowAtOrAboveThresholdWarning NOTIFICATION-TYPE
+    OBJECTS { aristaClbPortGroupNameMappingFullName,
+              aristaClbPortGroupAllocatedFlows,
+              aristaClbPortGroupUnallocatedFlows,
+              aristaClbPortGroupLearnedFlows,
+              aristaClbPortGroupAllocatedFlowThreshold
+            }
+    STATUS  current
+    DESCRIPTION
+        "This notification is generated when aristaClbPortGroupAllocatedFlows is at or
+         greater than aristaClbPortGroupAllocatedFlowThreshold. This can be used as a
+         warning before reaching the limit at which no more flows can be allocated."
+    ::= { aristaClbMibNotifications 1 }
+              
+aristaClbPortGroupAllocatedFlowBelowThresholdWarning NOTIFICATION-TYPE
+    OBJECTS { aristaClbPortGroupNameMappingFullName,
+              aristaClbPortGroupAllocatedFlows,
+              aristaClbPortGroupUnallocatedFlows,
+              aristaClbPortGroupLearnedFlows,
+              aristaClbPortGroupAllocatedFlowThreshold
+            }
+    STATUS  current
+    DESCRIPTION
+        "This notification is generated when aristaClbPortGroupAllocatedFlows is below
+         aristaClbPortGroupAllocatedFlowThreshold after previously sending
+         aristaClbPortGroupAllocatedFlowAtOrAboveThresholdWarning."
+    ::= { aristaClbMibNotifications 2 }
+              
+aristaClbPortGroupAllocatedFlowAtOrAboveLimit NOTIFICATION-TYPE
+    OBJECTS { aristaClbPortGroupNameMappingFullName,
+              aristaClbPortGroupAllocatedFlows,
+              aristaClbPortGroupUnallocatedFlows,
+              aristaClbPortGroupLearnedFlows,
+              aristaClbPortGroupAllocatedFlowLimit
+            }
+    STATUS  current
+    DESCRIPTION
+        "This notification is generated when aristaClbPortGroupAllocatedFlows is at or
+         greater than aristaClbPortGroupAllocatedFlowLimit. This means no more flows
+         can be allocated."
+    ::= { aristaClbMibNotifications 3 }
+
+aristaClbPortGroupAllocatedFlowBelowLimit NOTIFICATION-TYPE
+    OBJECTS { aristaClbPortGroupNameMappingFullName,
+              aristaClbPortGroupAllocatedFlows,
+              aristaClbPortGroupUnallocatedFlows,
+              aristaClbPortGroupLearnedFlows,
+              aristaClbPortGroupAllocatedFlowLimit
+            }
+    STATUS  current
+    DESCRIPTION
+        "This notification is generated when aristaClbPortGroupAllocatedFlows is below
+         aristaClbPortGroupAllocatedFlowLimit after previously sending
+         aristaClbPortGroupAllocatedFlowAtOrAboveLimit."
+    ::= { aristaClbMibNotifications 4 }
+
+-- Conformance and Compliance --
+
+aristaClbMibCompliances OBJECT IDENTIFIER
+    ::= { aristaClbMibConformance 1 }
+
+aristaClbMibGroups OBJECT IDENTIFIER
+    ::= { aristaClbMibConformance 2 }
+
+aristaClbMibCompliance MODULE-COMPLIANCE
+    STATUS     current
+    DESCRIPTION
+        "The compliance statement for Arista switches that implement
+        the ARISTA-CLB-MIB."
+    MODULE     -- this module
+    MANDATORY-GROUPS {
+        aristaClbMibGroup,
+        aristaClbNotificationGroup
+    }
+    ::= { aristaClbMibCompliances 1 }
+
+aristaClbMibGroup OBJECT-GROUP
+    OBJECTS {
+        aristaClbPortGroupLearnedFlows,
+        aristaClbPortGroupAllocatedFlows,
+        aristaClbPortGroupUnallocatedFlows,
+        aristaClbPortGroupAllocatedFlowLimit,
+        aristaClbPortGroupUnmatchedNormalBytes,
+        aristaClbPortGroupUnmatchedNormalPackets,
+        aristaClbPortGroupUnmatchedOverflowBytes,
+        aristaClbPortGroupUnmatchedOverflowPackets,
+        aristaClbPortGroupDiscontinuityTime,
+        aristaClbPortGroupNameMappingFullName,
+        aristaClbDestinationInterfaceActiveFlows,
+        aristaClbPortGroupAllocatedFlowThreshold,
+        aristaClbStatus,
+        aristaClbTotalAllocatedFlows,
+        aristaClbTotalUnallocatedFlows,
+        aristaClbTotalLearnedFlows
+    }
+    STATUS      current
+    DESCRIPTION
+        "The collection of objects that provide CLB information."
+    ::= { aristaClbMibGroups 1 }
+
+aristaClbNotificationGroup NOTIFICATION-GROUP
+    NOTIFICATIONS {
+        aristaClbPortGroupAllocatedFlowAtOrAboveThresholdWarning,
+        aristaClbPortGroupAllocatedFlowBelowThresholdWarning,
+        aristaClbPortGroupAllocatedFlowAtOrAboveLimit,
+        aristaClbPortGroupAllocatedFlowBelowLimit
+    }
+    STATUS current
+    DESCRIPTION
+        "The notifications generated by the system if the allocated flows
+         are greater than the thresholds or limits."
+    ::= { aristaClbMibGroups 2 }
+
+END

@@ -1,0 +1,523 @@
+-- ARISTA-CONMON-MIB: Arista structure of connectivity monitor management information
+-- Copyright (c) 2024 Arista Networks, Inc.  All rights reserved.
+
+ARISTA-CONMON-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+   MODULE-COMPLIANCE, OBJECT-GROUP       FROM SNMPv2-CONF
+   MODULE-IDENTITY, OBJECT-TYPE,
+   Integer32                             FROM SNMPv2-SMI
+   TEXTUAL-CONVENTION, DisplayString     FROM SNMPv2-TC
+   InetAddress, InetAddressType          FROM INET-ADDRESS-MIB
+   InterfaceIndexOrZero                  FROM IF-MIB
+   aristaMibs                            FROM ARISTA-SMI-MIB;
+
+aristaConMonMIB MODULE-IDENTITY
+   LAST-UPDATED "202504160000Z"
+   ORGANIZATION "Arista Networks, Inc."
+   CONTACT-INFO
+      "Arista Networks, Inc.
+
+         Postal: 5453 Great America Parkway
+                 Santa Clara, CA 95054
+
+         Tel: +1 408 547-5500
+
+         E-mail: snmp@arista.com"
+   DESCRIPTION
+         "The MIB module for reporting connectivity monitor statistics
+          on Arista devices."
+   REVISION "202504160000Z"
+   DESCRIPTION
+         "Initial version."
+   ::= { aristaMibs 38 }
+
+-- *********************************************************************************
+-- Textual Conventions
+-- *********************************************************************************
+
+ProbeIndex ::= TEXTUAL-CONVENTION
+   DISPLAY-HINT "100t"
+   STATUS      current
+   DESCRIPTION 
+         "Identifier with bounded length, derived from the aggregation of client,
+          host, IP address (ICMP and TCP probe specific), port number (only TCP 
+          probe specific) and source interface names of the connectivity monitor 
+          probes.
+          If the index string is longer than 90 characters, then the remaining 
+          characters are hashed and added as a suffix to the first 90 characters.
+          
+          ICMP probe:
+            - index string: '<client>+<host>+<ip address>+<source interface>'
+          HTTP probe:
+            - index string: '<client>+<host>+<url>+<source interface>'
+          TCP probe:
+            - index string: '<client>+<host>+<ip address>+<port number>
+                             +<source interface>'
+          For example:
+            - index string: 'client1-host1-10.1.1.2-Et1/1'
+              identifier: 'client1-host1-10.1.1.2-Et1/1'
+            - index string: 'client1-...<very long host name>...-10.1.1.2-Et1/1'
+              identifier: 'client1-host...0123456789'."
+   SYNTAX      OCTET STRING (SIZE (0..100))
+
+NetworkStatisticsPrecision ::= TEXTUAL-CONVENTION
+   DISPLAY-HINT "d"
+   STATUS      current
+   DESCRIPTION          
+         "The number of decimal places of precision in fixed-point network 
+          statistics.
+          
+          An object of type NetworkStatisticsPrecision is used to identify the
+          semantics of an object of type NetworkStatisticsValue.
+
+          Connectivity monitor statistics are rounded up to 3 decimal places,
+          so the number of decimal places must be between 0 and 3."
+   SYNTAX      Integer32 (0..3)
+
+NetworkStatisticsValue ::= TEXTUAL-CONVENTION
+   DISPLAY-HINT "d"
+   STATUS      current
+   DESCRIPTION 
+         "An oject of this data type represents connectivity monitor statistics.
+         
+          The semantics of an object using this data type are determined by the
+          value of the associated NetworkStatisticsPrecision object.
+          
+          For example, the network latency of 123.45 ms for a probe, would have a 
+          NetworkStatisticsPrecision value of '2', and a NetworkStatisticsValue 
+          value of '12345'."
+   SYNTAX      Integer32 (0..2147483647)
+
+-- *********************************************************************************
+-- MIB Groups
+-- *********************************************************************************
+
+aristaConMonObjects      OBJECT IDENTIFIER ::= { aristaConMonMIB 1 }
+aristaConMonConformance  OBJECT IDENTIFIER ::= { aristaConMonMIB 2 }
+
+-- *********************************************************************************
+-- The ICMP probe table
+-- *********************************************************************************
+
+aristaIcmpProbeTable OBJECT-TYPE
+   SYNTAX      SEQUENCE OF AristaIcmpProbeEntry
+   MAX-ACCESS  not-accessible
+   STATUS      current
+   DESCRIPTION 
+         "This table contains connectivity monitor statistics using ICMP ping."
+   ::= { aristaConMonObjects 1 }
+
+aristaIcmpProbeEntry OBJECT-TYPE
+   SYNTAX      AristaIcmpProbeEntry
+   MAX-ACCESS  not-accessible
+   STATUS      current
+   DESCRIPTION 
+         "An entry containing connectivity monitor statistics using ICMP ping for 
+          a given device."
+   INDEX   { aristaIcmpProbeIndex }
+   ::= { aristaIcmpProbeTable 1 }
+
+AristaIcmpProbeEntry ::= SEQUENCE {
+   aristaIcmpProbeIndex               ProbeIndex,
+   aristaIcmpProbeClient              DisplayString,
+   aristaIcmpProbeHost                DisplayString,
+   aristaIcmpProbeIpAddrType          InetAddressType,
+   aristaIcmpProbeIpAddr              InetAddress,
+   aristaIcmpProbeIfIndex             InterfaceIndexOrZero,
+   aristaIcmpProbeLatencyPrecision    NetworkStatisticsPrecision,
+   aristaIcmpProbeLatencyValue        NetworkStatisticsValue,
+   aristaIcmpProbeJitterPrecision     NetworkStatisticsPrecision,
+   aristaIcmpProbeJitterValue         NetworkStatisticsValue,
+   aristaIcmpProbePacketLoss          Integer32
+}
+
+aristaIcmpProbeIndex OBJECT-TYPE
+   SYNTAX     ProbeIndex
+   MAX-ACCESS not-accessible
+   STATUS     current
+   DESCRIPTION
+         "Connectivity monitor ICMP probe index."
+   ::= { aristaIcmpProbeEntry 1 }
+
+aristaIcmpProbeClient OBJECT-TYPE
+   SYNTAX     DisplayString
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "Connectivity monitor client name."
+   ::= { aristaIcmpProbeEntry 2 }
+
+aristaIcmpProbeHost OBJECT-TYPE
+   SYNTAX     DisplayString (SIZE (0..255))
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "Optional connectivity monitor host name. If there is no host name, the
+          value will be an empty string."
+   ::= { aristaIcmpProbeEntry 3 }
+
+aristaIcmpProbeIpAddrType OBJECT-TYPE
+   SYNTAX     InetAddressType
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "Optional IP address type of configured host. If there is no IP address 
+          type, the value will be unknown(0), and the value of aristaIcmpProbeIpAddr 
+          will be a zero-length string."
+   ::= { aristaIcmpProbeEntry 4 }
+
+aristaIcmpProbeIpAddr OBJECT-TYPE
+   SYNTAX     InetAddress
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "Optional IP address of configured host. If there is no IP address, the 
+          value will be a zero-length string, and the value of 
+          aristaIcmpProbeIpAddrType will be unknown(0)."
+   ::= { aristaIcmpProbeEntry 5 }
+
+aristaIcmpProbeIfIndex OBJECT-TYPE
+   SYNTAX     InterfaceIndexOrZero
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "The value of the ifIndex object, defined in IF-MIB for the source
+          interface from which the probe was sent. Zero means the interface
+          used for probing was unknown and was selected by kernel."
+   ::= { aristaIcmpProbeEntry 6 }
+
+aristaIcmpProbeLatencyPrecision OBJECT-TYPE
+   SYNTAX     NetworkStatisticsPrecision
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "The number of decimal places of precision in fixed-point latency values 
+          returned by the associated aristaIcmpProbeLatencyValue object."
+   ::= { aristaIcmpProbeEntry 7 }
+
+aristaIcmpProbeLatencyValue OBJECT-TYPE
+   SYNTAX     NetworkStatisticsValue
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "Latency in milliseconds. If the probe failed, this will be set to its
+          maximum value (2,147,483,647).
+          
+          To correctly interpret the value of this object, the associated 
+          aristaIcmpProbeLatencyPrecision object must be examined."
+   ::= { aristaIcmpProbeEntry 8 }
+
+aristaIcmpProbeJitterPrecision OBJECT-TYPE
+   SYNTAX     NetworkStatisticsPrecision
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "The number of decimal places of precision in fixed-point jitter values 
+          returned by the associated aristaIcmpProbeJitterValue object."
+   ::= { aristaIcmpProbeEntry 9 }
+
+aristaIcmpProbeJitterValue OBJECT-TYPE
+   SYNTAX     NetworkStatisticsValue
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "Jitter in milliseconds. If the probe failed, this will be set to its
+          maximum value (2,147,483,647).
+          
+          To correctly interpret the value of this object, the associated 
+          aristaIcmpProbeJitterPrecision object must be examined."
+   ::= { aristaIcmpProbeEntry 10 }
+
+aristaIcmpProbePacketLoss OBJECT-TYPE
+   SYNTAX     Integer32 (0..100)
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "Percentage of packet loss."
+   ::= { aristaIcmpProbeEntry 11 }
+
+-- *********************************************************************************
+-- The HTTP probe table
+-- *********************************************************************************
+
+aristaHttpProbeTable OBJECT-TYPE
+   SYNTAX      SEQUENCE OF AristaHttpProbeEntry
+   MAX-ACCESS  not-accessible
+   STATUS      current
+   DESCRIPTION 
+         "This table contains connectivity monitor statistics using HTTP get 
+          requests."
+   ::= { aristaConMonObjects 2 }
+
+aristaHttpProbeEntry OBJECT-TYPE
+   SYNTAX      AristaHttpProbeEntry
+   MAX-ACCESS  not-accessible
+   STATUS      current
+   DESCRIPTION 
+         "An entry containing connectivity monitor statistics using HTTP get 
+          request for a given device."
+   INDEX   { aristaHttpProbeIndex }
+   ::= { aristaHttpProbeTable 1 }
+
+AristaHttpProbeEntry ::= SEQUENCE {
+   aristaHttpProbeIndex                      ProbeIndex,
+   aristaHttpProbeClient                     DisplayString,
+   aristaHttpProbeHost                       DisplayString,
+   aristaHttpProbeUrl                        DisplayString,
+   aristaHttpProbeIfIndex                    InterfaceIndexOrZero,
+   aristaHttpProbeResponseTimePrec           NetworkStatisticsPrecision,
+   aristaHttpProbeResponseTimeValue          NetworkStatisticsValue
+}
+
+aristaHttpProbeIndex OBJECT-TYPE
+   SYNTAX     ProbeIndex
+   MAX-ACCESS not-accessible
+   STATUS     current
+   DESCRIPTION
+         "Connectivity monitor HTTP probe index."
+   ::= { aristaHttpProbeEntry 1 }
+
+aristaHttpProbeClient OBJECT-TYPE
+   SYNTAX     DisplayString
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "Connectivity monitor client name."
+   ::= { aristaHttpProbeEntry 2 }
+
+aristaHttpProbeHost OBJECT-TYPE
+   SYNTAX     DisplayString
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "Connectivity monitor host name."
+   ::= { aristaHttpProbeEntry 3 }
+
+aristaHttpProbeUrl OBJECT-TYPE
+   SYNTAX     DisplayString
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "Connectivity monitor url."
+   ::= { aristaHttpProbeEntry 4 }
+
+aristaHttpProbeIfIndex OBJECT-TYPE
+   SYNTAX     InterfaceIndexOrZero
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "The value of the ifIndex object, defined in IF-MIB for the source
+          interface from which the probe was sent. Zero means the interface
+          used for probing was unknown and was selected by kernel."
+   ::= { aristaHttpProbeEntry 5 }
+
+aristaHttpProbeResponseTimePrec OBJECT-TYPE
+   SYNTAX     NetworkStatisticsPrecision
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "The number of decimal places of precision in fixed-point response time
+          values returned by the associated aristaHttpProbeResponseTimeValue object."
+   ::= { aristaHttpProbeEntry 6 }
+
+aristaHttpProbeResponseTimeValue OBJECT-TYPE
+   SYNTAX     NetworkStatisticsValue
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "Response time in milliseconds. If the probe failed, this will be set to 
+          its maximum value (2,147,483,647).
+
+          To correctly interpret the value of this object, the associated 
+          aristaHttpProbeResponseTimePrec object must be examined."
+   ::= { aristaHttpProbeEntry 7 }
+
+-- *********************************************************************************
+-- The TCP probe table
+-- *********************************************************************************
+
+aristaTcpProbeTable OBJECT-TYPE
+   SYNTAX      SEQUENCE OF AristaTcpProbeEntry
+   MAX-ACCESS  not-accessible
+   STATUS      current
+   DESCRIPTION 
+         "This table contains connectivity monitor statistics using the TCP 
+          probe."
+   ::= { aristaConMonObjects 3 }
+
+aristaTcpProbeEntry OBJECT-TYPE
+   SYNTAX      AristaTcpProbeEntry
+   MAX-ACCESS  not-accessible
+   STATUS      current
+   DESCRIPTION 
+         "An entry containing connectivity monitor statistics using TCP probe 
+          for a given device."
+   INDEX   { aristaTcpProbeIndex }
+   ::= { aristaTcpProbeTable 1 }
+
+AristaTcpProbeEntry ::= SEQUENCE {
+   aristaTcpProbeIndex                ProbeIndex,
+   aristaTcpProbeClient               DisplayString,
+   aristaTcpProbeHost                 DisplayString,
+   aristaTcpProbeIpAddrType           InetAddressType,
+   aristaTcpProbeIpAddr               InetAddress,
+   aristaTcpProbePort                 Integer32,
+   aristaTcpProbeIfIndex              InterfaceIndexOrZero,
+   aristaTcpProbeLatencyPrecision     NetworkStatisticsPrecision,
+   aristaTcpProbeLatencyValue         NetworkStatisticsValue
+}
+
+aristaTcpProbeIndex OBJECT-TYPE
+   SYNTAX     ProbeIndex
+   MAX-ACCESS not-accessible
+   STATUS     current
+   DESCRIPTION
+         "Connectivity monitor TCP probe index."
+   ::= { aristaTcpProbeEntry 1 }
+
+aristaTcpProbeClient OBJECT-TYPE
+   SYNTAX     DisplayString
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "Connectivity monitor client name."
+   ::= { aristaTcpProbeEntry 2 }
+
+aristaTcpProbeHost OBJECT-TYPE
+   SYNTAX     DisplayString (SIZE (0..255))
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "Optional connectivity monitor host name. If there is no host name, the
+          value will be an empty string."
+   ::= { aristaTcpProbeEntry 3 }
+
+aristaTcpProbeIpAddrType OBJECT-TYPE
+   SYNTAX     InetAddressType
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "Optional IP address type of configured host. If there is no IP address 
+          type, the value will be unknown(0), and the value of aristaTcpProbeIpAddr 
+          will be a zero-length string."
+   ::= { aristaTcpProbeEntry 4 }
+
+aristaTcpProbeIpAddr OBJECT-TYPE
+   SYNTAX     InetAddress
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "Optional IP address of configured host. If there is no IP address, the 
+          value will be a zero-length string, and the value of 
+          aristaTcpProbeIpAddrType will be unknown(0)."
+   ::= { aristaTcpProbeEntry 5 }
+
+aristaTcpProbePort OBJECT-TYPE
+   SYNTAX     Integer32
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "Configured TCP server port."
+   ::= { aristaTcpProbeEntry 6 }
+
+aristaTcpProbeIfIndex OBJECT-TYPE
+   SYNTAX     InterfaceIndexOrZero
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "The value of the ifIndex object, defined in IF-MIB for the source
+          interface from which the probe was sent. Zero means the interface
+          used for probing was unknown and was selected by kernel."
+   ::= { aristaTcpProbeEntry 7 }
+
+aristaTcpProbeLatencyPrecision OBJECT-TYPE
+   SYNTAX     NetworkStatisticsPrecision
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "The number of decimal places of precision in fixed-point latency values 
+          returned by the associated aristaTcpProbeLatencyValue object."
+   ::= { aristaTcpProbeEntry 8 }
+
+aristaTcpProbeLatencyValue OBJECT-TYPE
+   SYNTAX     NetworkStatisticsValue
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "Latency in milliseconds. If the probe failed, this will be set to its
+          maximum value (2,147,483,647).
+          
+          To correctly interpret the value of this object, the associated 
+          aristaTcpProbeLatencyPrecision object must be examined."
+   ::= { aristaTcpProbeEntry 9 }
+
+-- *********************************************************************************
+-- Conformance Information
+-- *********************************************************************************
+
+aristaConMonCompliances OBJECT IDENTIFIER ::= { aristaConMonConformance 1 }
+aristaConMonGroups      OBJECT IDENTIFIER ::= { aristaConMonConformance 2 }
+
+aristaConMonCompliance MODULE-COMPLIANCE
+   STATUS     current
+   DESCRIPTION
+         "The compliance statement for Arista switches that implement
+          the ARISTA-CONMON-MIB."
+   MODULE     -- this module
+   MANDATORY-GROUPS {
+      aristaIcmpProbeGroup,
+      aristaHttpProbeGroup,
+      aristaTcpProbeGroup
+   }
+   ::= { aristaConMonCompliances 1 }
+
+aristaIcmpProbeGroup OBJECT-GROUP
+   OBJECTS {
+      aristaIcmpProbeClient,
+      aristaIcmpProbeHost,
+      aristaIcmpProbeIpAddrType,
+      aristaIcmpProbeIpAddr,
+      aristaIcmpProbeIfIndex,
+      aristaIcmpProbeLatencyPrecision,
+      aristaIcmpProbeLatencyValue,
+      aristaIcmpProbeJitterPrecision,
+      aristaIcmpProbeJitterValue,
+      aristaIcmpProbePacketLoss
+   }
+   STATUS      current
+   DESCRIPTION
+         "The collection of objects for ICMP probe table."
+   ::= { aristaConMonGroups 1 }
+
+aristaHttpProbeGroup OBJECT-GROUP
+   OBJECTS {
+      aristaHttpProbeClient,
+      aristaHttpProbeHost,
+      aristaHttpProbeUrl,
+      aristaHttpProbeIfIndex,
+      aristaHttpProbeResponseTimePrec,
+      aristaHttpProbeResponseTimeValue
+   }
+   STATUS      current
+   DESCRIPTION
+         "The collection of objects for HTTP probe table."
+   ::= { aristaConMonGroups 2 }
+
+aristaTcpProbeGroup OBJECT-GROUP
+   OBJECTS {
+      aristaTcpProbeClient,
+      aristaTcpProbeHost,
+      aristaTcpProbeIpAddrType,
+      aristaTcpProbeIpAddr,
+      aristaTcpProbePort,
+      aristaTcpProbeIfIndex,
+      aristaTcpProbeLatencyPrecision,
+      aristaTcpProbeLatencyValue
+   }
+   STATUS      current
+   DESCRIPTION
+         "The collection of objects for TCP probe table."
+   ::= { aristaConMonGroups 3 }
+
+END

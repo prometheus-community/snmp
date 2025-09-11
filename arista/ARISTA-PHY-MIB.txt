@@ -1,0 +1,257 @@
+-- ARISTA-PHY-MIB: Arista layer1 PHY information
+-- Copyright (c) 2024 Arista Networks, Inc.  All rights reserved.
+
+ARISTA-PHY-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY, OBJECT-TYPE,
+    Counter64, Integer32                 FROM SNMPv2-SMI
+    TEXTUAL-CONVENTION                   FROM SNMPv2-TC
+    MODULE-COMPLIANCE, OBJECT-GROUP      FROM SNMPv2-CONF
+    ifIndex                              FROM IF-MIB
+    aristaMibs                           FROM ARISTA-SMI-MIB;
+
+aristaPhyMIB MODULE-IDENTITY
+    LAST-UPDATED "202501290000Z"
+    ORGANIZATION "Arista Networks, Inc."
+    CONTACT-INFO
+        "Arista Networks, Inc.
+
+        Postal: 5453 Great America Parkway
+                Santa Clara, CA 95054
+
+        Tel: +1 408 547-5500
+
+        E-mail: snmp@arista.com"
+    DESCRIPTION
+        "The MIB module for providing PHY information on Arista
+        devices."
+    REVISION     "202501290000Z"
+    DESCRIPTION  "Initial version."
+    ::= { aristaMibs 37 }
+
+L1TelemetryDataScale ::= TEXTUAL-CONVENTION
+    STATUS       current
+    DESCRIPTION
+        "An object using this data type represents a data scaling
+        factor, represented with an International System of Units
+        (SI) prefix."
+    REFERENCE
+        "The International System of Units (SI),
+        National Institute of Standards and Technology,
+        Spec. Publ. 330, August 1991."
+    SYNTAX  INTEGER {
+        yocto(1),   -- 10^-24
+        zepto(2),   -- 10^-21
+        atto(3),    -- 10^-18
+        femto(4),   -- 10^-15
+        pico(5),    -- 10^-12
+        nano(6),    -- 10^-9
+        micro(7),   -- 10^-6
+        milli(8),   -- 10^-3
+        units(9)    -- 10^0
+    }
+
+L1TelemetryPrecision ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "d"
+    STATUS      current
+    DESCRIPTION
+        "The number of decimal places of precision in fixed-point L1
+        telemetry data.
+
+        An object of type L1TelemetryPrecision is used to identify
+        the semantics of an object of type L1TelemetryValue."
+    SYNTAX  Integer32 (-9..9)
+
+L1TelemetryValue ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "d"
+    STATUS      current
+    DESCRIPTION
+        "An object of this data type represents L1 Telemetry data.
+
+        The semantics of an object using this data type are
+        determined by the value of the associated L1TelemetryPrecision
+        object.
+
+        This value ranges from -2^31 to 2^31.
+
+        For example, the aristaPhyIntfPreFecBer value of 9.73E-12,
+        would have a L1TelemetryDataScale value of '5',
+        L1TelemetryPrecision value of '2', and a L1TelemetryValue value
+        of '973'."
+    SYNTAX  Integer32 (-2147483648..2147483647)
+
+aristaPhyIntfTable OBJECT-TYPE
+    SYNTAX       SEQUENCE OF AristaPhyIntfEntry
+    MAX-ACCESS   not-accessible
+    STATUS       current
+    DESCRIPTION
+        "This table contains Layer1 telemetry for a given PHY line on
+        a particular interface"
+    ::= { aristaPhyMIB 1 }
+
+aristaPhyIntfEntry  OBJECT-TYPE
+    SYNTAX       AristaPhyIntfEntry
+    MAX-ACCESS   not-accessible
+    STATUS       current
+    DESCRIPTION
+        "This contains Layer1 telemetry for a given PHY line on a
+        particular interface"
+    INDEX { ifIndex }
+    ::= { aristaPhyIntfTable 1 }
+
+AristaPhyIntfEntry ::= SEQUENCE {
+   -- Telemetry info
+    aristaPhyIntfCapabilitiesMap            BITS,
+    aristaPhyIntfPcsBer                     Counter64,
+    aristaPhyIntfPreFecBer                  L1TelemetryValue,
+    aristaPhyIntfPreFecBerPrecision         L1TelemetryPrecision,
+    aristaPhyIntfPreFecBerDataScale         L1TelemetryDataScale,
+    aristaPhyIntfFecUncorrectedCodewords    Counter64,
+    aristaPhyIntfStateChangeCount           Counter64
+}
+
+aristaPhyIntfCapabilitiesMap OBJECT-TYPE
+    SYNTAX  BITS {
+        pcsBer(0),
+        preFecBer(1),
+        fecUncorrectedCodewords(2),
+        phyStateChangeCount(3)
+    }
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "Bitmap representing which objects for a given
+        aristaPhyIntfEntry are supported. The values defined
+        here correspond to the objects aristaPhyIntfPcsBer,
+        aristaPhyIntfPreFecBer and aristaPhyIntfFecUncorrectedCodewords
+        respectively.  For every value in bitmap, if it is set, then
+        the value of the corresponding object in the same
+        aristaPhyIntfEntry is valid; otherwise, the value of the
+        object has no meaning and should be ignored.
+
+        The bit 'pcsBer(0)' indicates whether or not
+        aristaPhyIntfPcsBer is supported on the PHY-Interface.
+
+        The bit 'preFecBer(1)' indicates whether or not
+        aristaPhyIntfPreFecBer, aristaPhyIntfPreFecBerPrecision,
+        aristaPhyIntfPreFecBerDataScale is supported on the
+        PHY-Interface.
+
+        The bit 'fecUncorrectedCodewords(2)' indicates whether or not
+        aristaPhyIntfFecUncorrectedCodewords is supported on
+        the PHY-Interface.
+
+        The bit 'phyStateChangeCount(3)' indicates whether or not
+        aristaPhyIntfStateChangeCount is supported on the PHY-Interface."
+    ::= { aristaPhyIntfEntry 1 }
+
+aristaPhyIntfPcsBer  OBJECT-TYPE
+    SYNTAX       Counter64
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "Number of bit errors seen in the post-FEC bit stream. If
+        forward error correction is not enabled on the link, then
+        this is the raw bit error value."
+    ::= { aristaPhyIntfEntry 2 }
+
+aristaPhyIntfPreFecBer   OBJECT-TYPE
+    SYNTAX       L1TelemetryValue
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "The value for the ratio of error bits to total bits seen in
+        the pre-FEC bitstream. This indicates the rate of bits seen
+        before forward error correction is applied to the bit stream.
+
+        This should be used in conjunction with
+        aristaPhyIntfPreFecBerPrecision and aristaPhyIntfPreFecBerDataScale
+        to extract the final calculated value. Note that the
+        aristaPhyIntfPreFecBer value is not accurate in the presence of
+        aristaPhyIntfFecUncorrectedCodewords."
+    ::= { aristaPhyIntfEntry 3 }
+
+aristaPhyIntfPreFecBerPrecision  OBJECT-TYPE
+    SYNTAX       L1TelemetryPrecision
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "The value that represents the precision for the
+        aristaPhyIntfPreFecBer value. This should be used together with
+        aristaPhyIntfPreFecBer and aristaPhyIntfPreFecBerScale to obtain
+        the final calculated pre-FEC BER value."
+    ::= { aristaPhyIntfEntry 4 }
+
+aristaPhyIntfPreFecBerDataScale  OBJECT-TYPE
+    SYNTAX       L1TelemetryDataScale
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "The value that represents the data scaling factor, represented
+        with an International System of Units (SI) prefix.  The actual
+        data units are determined by examining an object of this type
+        together with the associated aristaPhyIntfPreFecBer and
+        aristaPhyIntfPreFecBerPrecision object to obtain the final
+        calculated pre-FEC BER value."
+    ::= { aristaPhyIntfEntry 5 }
+
+aristaPhyIntfFecUncorrectedCodewords OBJECT-TYPE
+    SYNTAX       Counter64
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "The number of codewords that the forward error correction
+        algorithm could not correct. The presence of these values
+        indicates an unhealthy link, and invalidates the
+        aristaPhyIntfPreFecBer value."
+    ::= { aristaPhyIntfEntry 6 }
+
+aristaPhyIntfStateChangeCount OBJECT-TYPE
+    SYNTAX       Counter64
+    MAX-ACCESS   read-only
+    STATUS       current
+    DESCRIPTION
+        "The number of times a given PHY link has transitioned
+        between different states."
+    ::= { aristaPhyIntfEntry 7 }
+
+-- Conformance and Compliance
+
+aristaPhyMibConformance OBJECT IDENTIFIER
+    ::= { aristaPhyMIB 3 }
+
+aristaPhyMibCompliances OBJECT IDENTIFIER
+    ::= { aristaPhyMibConformance 1 }
+
+aristaPhyMibGroups OBJECT IDENTIFIER
+    ::= { aristaPhyMibConformance 2 }
+
+aristaPhyMibCompliance    MODULE-COMPLIANCE
+    STATUS     current
+    DESCRIPTION
+        "The compliance statement for Arista switches that implement
+        the ARISTA-PHY-MIB."
+    MODULE     -- this module
+    MANDATORY-GROUPS {
+        aristaPhyGroup
+    }
+    ::= { aristaPhyMibCompliances 1 }
+
+aristaPhyGroup  OBJECT-GROUP
+    OBJECTS {
+        aristaPhyIntfCapabilitiesMap,
+        aristaPhyIntfPcsBer,
+        aristaPhyIntfPreFecBer,
+        aristaPhyIntfPreFecBerPrecision,
+        aristaPhyIntfPreFecBerDataScale,
+        aristaPhyIntfFecUncorrectedCodewords,
+        aristaPhyIntfStateChangeCount
+    }
+    STATUS  current
+    DESCRIPTION
+        "The collection of objects that provide per PHY-interface
+        specific information."
+    ::= { aristaPhyMibGroups 1 }
+
+END

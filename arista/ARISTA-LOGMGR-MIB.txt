@@ -1,0 +1,210 @@
+-- ARISTA-LOGMGR-MIB: Arista structure of logging manager management information
+-- Copyright (c) 2024 Arista Networks, Inc.  All rights reserved.
+
+ARISTA-LOGMGR-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-COMPLIANCE, OBJECT-GROUP       FROM SNMPv2-CONF
+    MODULE-IDENTITY, OBJECT-TYPE,
+    Counter64, Unsigned32                 FROM SNMPv2-SMI
+    TEXTUAL-CONVENTION, TimeStamp         FROM SNMPv2-TC
+    InetAddressType, InetAddress          FROM INET-ADDRESS-MIB
+    aristaMibs                            FROM ARISTA-SMI-MIB;
+
+aristaLogMgrMIB MODULE-IDENTITY
+    LAST-UPDATED "202409300000Z"
+    ORGANIZATION "Arista Networks, Inc."
+    CONTACT-INFO
+        "Arista Networks, Inc.
+
+         Postal: 5453 Great America Parkway
+                 Santa Clara, CA 95054
+
+         Tel: +1 408 547-5500
+
+         E-mail: snmp@arista.com"
+    DESCRIPTION
+        "The MIB module for managing logging manager statistics on
+        Arista devices."
+    REVISION  "202409300000Z"
+    DESCRIPTION
+       "The initial revision of this MIB module."
+    ::= { aristaMibs 39 }
+
+-- Textual Conventions
+AristaLogProtocol ::= TEXTUAL-CONVENTION
+    STATUS       current
+    DESCRIPTION
+       "The protocol used for logging."
+    SYNTAX       INTEGER {
+                    udp(0),
+                    tcp(1),
+                    tls(2)
+                 }
+
+-- MIB groups
+aristaLogMgrObjects OBJECT IDENTIFIER ::= { aristaLogMgrMIB 1 }
+aristaLogMgrConformance OBJECT IDENTIFIER ::= { aristaLogMgrMIB 2 }
+
+-- Log Statistics objects
+aristaLogForwardingStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF AristaLogForwardingStatsTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "A table that contains log forwarding statistics for each syslog server."
+    ::= { aristaLogMgrObjects 1 }
+
+aristaLogForwardingStatsTableEntry OBJECT-TYPE
+    SYNTAX      AristaLogForwardingStatsTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "An entry that contains log forwarding statistics for a given syslog server."
+    INDEX {
+       aristaLogForwardingStatsIpAddrType,
+       aristaLogForwardingStatsIpAddr,
+       aristaLogForwardingStatsPort
+       }
+    ::= { aristaLogForwardingStatsTable 1 }
+
+AristaLogForwardingStatsTableEntry ::= SEQUENCE {
+    -- Index
+    aristaLogForwardingStatsIpAddrType         InetAddressType,
+    aristaLogForwardingStatsIpAddr             InetAddress,
+    aristaLogForwardingStatsPort               Unsigned32,
+    -- Log forwarding statistics
+    aristaLogForwardingStatsProtocol           AristaLogProtocol,
+    aristaLogForwardingStatsLastRefreshed      TimeStamp,
+    aristaLogForwardingStatsBytesSent          Counter64,
+    aristaLogForwardingStatsProcessed          Counter64,
+    aristaLogForwardingStatsFailed             Counter64,
+    aristaLogForwardingStatsSuspended          Counter64,
+    aristaLogForwardingStatsSuspendedDuration  Counter64,
+    aristaLogForwardingStatsResumed            Counter64
+}
+
+aristaLogForwardingStatsIpAddrType OBJECT-TYPE
+    SYNTAX      InetAddressType
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+       "Logging host IP address family."
+    ::= { aristaLogForwardingStatsTableEntry 1 }
+
+aristaLogForwardingStatsIpAddr OBJECT-TYPE
+    SYNTAX      InetAddress
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+       "Logging host IP address."
+    ::= { aristaLogForwardingStatsTableEntry 2 }
+
+aristaLogForwardingStatsPort OBJECT-TYPE
+    SYNTAX      Unsigned32 (1..65535)
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+       "Logging host port number."
+    ::= { aristaLogForwardingStatsTableEntry 3 }
+
+aristaLogForwardingStatsProtocol OBJECT-TYPE
+    SYNTAX      AristaLogProtocol
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+       "The protocol used for sending logs to the logging host."
+    ::= { aristaLogForwardingStatsTableEntry 4 }
+
+aristaLogForwardingStatsLastRefreshed OBJECT-TYPE
+    SYNTAX      TimeStamp
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+       "Timestamp indicating when this entry's statistics were last updated."
+    ::= { aristaLogForwardingStatsTableEntry 5 }
+
+aristaLogForwardingStatsBytesSent OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+       "Total number of bytes sent to the logging host."
+    ::= { aristaLogForwardingStatsTableEntry 6 }
+
+aristaLogForwardingStatsProcessed OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+       "Total number of log messages that were processed for forwarding to
+       the logging host. This count is the sum of the number of messages
+       that were successfully forwarded and the number of messages that
+       were unsuccessfully forwarded (see aristaLogForwardingStatsFailed)."
+    ::= { aristaLogForwardingStatsTableEntry 7 }
+
+aristaLogForwardingStatsFailed OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+       "Total number of log messages that were unsuccessfully forwarded to
+       the logging host."
+    ::= { aristaLogForwardingStatsTableEntry 8 }
+
+aristaLogForwardingStatsSuspended OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+       "Total number of times log forwarding was suspended."
+    ::= { aristaLogForwardingStatsTableEntry 9 }
+
+aristaLogForwardingStatsSuspendedDuration OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+       "Total number of seconds log forwarding was suspended."
+    ::= { aristaLogForwardingStatsTableEntry 10 }
+
+aristaLogForwardingStatsResumed OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+       "Total number of times log forwarding was resumed."
+    ::= { aristaLogForwardingStatsTableEntry 11 }
+
+-- Conformance
+aristaLogMgrCompliances OBJECT IDENTIFIER ::= { aristaLogMgrConformance 1 }
+aristaLogMgrGroups OBJECT IDENTIFIER ::= { aristaLogMgrConformance 2 }
+
+aristaLogMgrCompliance MODULE-COMPLIANCE
+    STATUS     current
+    DESCRIPTION
+       "The compliance statement for Arista switches that implement
+       the ARISTA-LOGMGR-MIB."
+    MODULE     -- this module
+    MANDATORY-GROUPS {
+        aristaLogForwardingStatsGroup
+        }
+    ::= { aristaLogMgrCompliances 1 }
+
+aristaLogForwardingStatsGroup OBJECT-GROUP
+    OBJECTS {
+        aristaLogForwardingStatsProtocol,
+        aristaLogForwardingStatsLastRefreshed,
+        aristaLogForwardingStatsBytesSent,
+        aristaLogForwardingStatsProcessed,
+        aristaLogForwardingStatsFailed,
+        aristaLogForwardingStatsSuspended,
+        aristaLogForwardingStatsSuspendedDuration,
+        aristaLogForwardingStatsResumed
+        }
+    STATUS       current
+    DESCRIPTION
+       "The collection of objects for log forwarding statistics."
+    ::= { aristaLogMgrGroups 1 }
+
+END

@@ -1,0 +1,219 @@
+-- ARISTA-SWAG-HOST-RESOURCES-MIB: Arista SWAG host resources MIB
+-- Copyright (c) 2025 Arista Networks, Inc.  All rights reserved.
+
+ARISTA-SWAG-HOST-RESOURCES-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+   MODULE-COMPLIANCE, OBJECT-GROUP              FROM SNMPv2-CONF
+   MODULE-IDENTITY, OBJECT-TYPE,
+   Integer32, Gauge32, TimeTicks, Unsigned32    FROM SNMPv2-SMI
+   DateAndTime                                  FROM SNMPv2-TC
+   SwagMemberId                                 FROM ARISTA-SWAG-MIB
+   KBytes                                       FROM HOST-RESOURCES-MIB
+   aristaMibs                                   FROM ARISTA-SMI-MIB;
+
+aristaSwagHostResourcesMIB MODULE-IDENTITY
+   LAST-UPDATED "202503120000Z"
+   ORGANIZATION "Arista Networks, Inc."
+   CONTACT-INFO
+      "Arista Networks, Inc.
+
+         Postal: 5453 Great America Parkway
+                 Santa Clara, CA 95054
+
+         Tel: +1 408 547-5500
+
+         E-mail: snmp@arista.com"
+   DESCRIPTION
+         "The MIB module for reporting SWAG system level information on Arista
+          devices."
+   REVISION "202503120000Z"
+   DESCRIPTION
+         "Initial version."
+   ::= { aristaMibs 41 }
+
+-- *********************************************************************************
+-- MIB Groups
+-- *********************************************************************************
+
+aristaSwagHrObjects      OBJECT IDENTIFIER ::= { aristaSwagHostResourcesMIB 1 }
+aristaSwagHrConformance  OBJECT IDENTIFIER ::= { aristaSwagHostResourcesMIB 2 }
+
+-- *********************************************************************************
+-- The SWAG Hr System table
+-- *********************************************************************************
+
+aristaSwagHrSystemTable OBJECT-TYPE
+   SYNTAX      SEQUENCE OF AristaSwagHrSystemEntry
+   MAX-ACCESS  not-accessible
+   STATUS      current
+   DESCRIPTION
+         "This table contains system-level information, including system up time,
+          date, number of users, information on processes, and memory size for
+          all members in the SWAG that this device is a part of."
+   ::= { aristaSwagHrObjects 1 }
+
+aristaSwagHrSystemEntry OBJECT-TYPE
+   SYNTAX      AristaSwagHrSystemEntry
+   MAX-ACCESS  not-accessible
+   STATUS      current
+   DESCRIPTION
+         "An entry containing system-level information for a SWAG member."
+   INDEX   { aristaSwagHrSystemMemberId }
+   ::= { aristaSwagHrSystemTable 1 }
+
+AristaSwagHrSystemEntry ::= SEQUENCE {
+   aristaSwagHrSystemMemberId            SwagMemberId,
+   aristaSwagHrSystemUpTime              TimeTicks,
+   aristaSwagHrSystemDate                DateAndTime,
+   aristaSwagHrSystemNumUsers            Gauge32,
+   aristaSwagHrSystemProcesses           Gauge32,
+   aristaSwagHrSystemMemorySize          KBytes
+}
+
+aristaSwagHrSystemMemberId OBJECT-TYPE
+   SYNTAX     SwagMemberId
+   MAX-ACCESS not-accessible
+   STATUS     current
+   DESCRIPTION
+         "SWAG member ID this entry corresponds to."
+   ::= { aristaSwagHrSystemEntry 1 }
+
+aristaSwagHrSystemUpTime OBJECT-TYPE
+   SYNTAX     TimeTicks
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "The amount of time since this SWAG member was last initialized."
+   ::= { aristaSwagHrSystemEntry 2 }
+
+aristaSwagHrSystemDate OBJECT-TYPE
+   SYNTAX     DateAndTime
+   MAX-ACCESS read-write
+   STATUS     current
+   DESCRIPTION
+         "This device's notion of the local date and time of day."
+   ::= { aristaSwagHrSystemEntry 3 }
+
+aristaSwagHrSystemNumUsers OBJECT-TYPE
+   SYNTAX     Gauge32
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "The number of distinct users currently logged into the device."
+   ::= { aristaSwagHrSystemEntry 4 }
+
+aristaSwagHrSystemProcesses OBJECT-TYPE
+   SYNTAX     Gauge32
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "The number of process contexts currently loaded or running on this SWAG
+          member."
+   ::= { aristaSwagHrSystemEntry 5 }
+
+aristaSwagHrSystemMemorySize OBJECT-TYPE
+   SYNTAX     KBytes
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "The amount of physical read-write main memory, typically RAM, contained by
+          this SWAG member."
+   ::= { aristaSwagHrSystemEntry 6 }
+
+-- *********************************************************************************
+-- The SWAG Processor table
+-- *********************************************************************************
+
+aristaSwagProcessorTable OBJECT-TYPE
+   SYNTAX     SEQUENCE OF AristaSwagProcessorEntry
+   MAX-ACCESS not-accessible
+   STATUS     current
+   DESCRIPTION
+         "This table describes the utilization of every processing unit in the
+          system, across all members in the SWAG that this device is a part of."
+   ::= { aristaSwagHrObjects 2 }
+
+aristaSwagProcessorEntry OBJECT-TYPE
+   SYNTAX     AristaSwagProcessorEntry
+   MAX-ACCESS not-accessible
+   STATUS     current
+   DESCRIPTION
+         "An entry containing the average utilization for a processing unit of a
+          SWAG member."
+   INDEX { aristaSwagProcessorMemberId, aristaSwagProcessorIndex }
+   ::= { aristaSwagProcessorTable 1 }
+
+AristaSwagProcessorEntry ::= SEQUENCE {   
+   aristaSwagProcessorMemberId           SwagMemberId,
+   aristaSwagProcessorIndex              Unsigned32,
+   aristaSwagProcessorLoad               Integer32
+}
+
+aristaSwagProcessorMemberId OBJECT-TYPE
+   SYNTAX     SwagMemberId
+   MAX-ACCESS not-accessible
+   STATUS     current
+   DESCRIPTION
+         "SWAG member ID this entry corresponds to."
+   ::= { aristaSwagProcessorEntry 1 }
+
+aristaSwagProcessorIndex OBJECT-TYPE
+   SYNTAX     Unsigned32
+   MAX-ACCESS not-accessible
+   STATUS     current
+   DESCRIPTION
+         "A unique identifier for each processor in the system."
+   ::= { aristaSwagProcessorEntry 2 }
+
+aristaSwagProcessorLoad OBJECT-TYPE
+   SYNTAX     Integer32 (0..100)
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "The average, over the last minute, of the percentage of time that this
+          processor was not idle."
+   ::= { aristaSwagProcessorEntry 3 }
+
+-- *********************************************************************************
+-- Conformance Information
+-- *********************************************************************************
+
+aristaSwagHrCompliances OBJECT IDENTIFIER ::= { aristaSwagHrConformance 1 }
+aristaSwagHrGroups      OBJECT IDENTIFIER ::= { aristaSwagHrConformance 2 }
+
+aristaSwagHrCompliance MODULE-COMPLIANCE
+   STATUS     current
+   DESCRIPTION
+         "The compliance statement for Arista switches that implement
+          the ARISTA-SWAG-HR-MIB."
+   MODULE     -- this module
+   MANDATORY-GROUPS {
+      aristaSwagHrSystemGroup,
+      aristaSwagProcessorGroup
+   }
+   ::= { aristaSwagHrCompliances 1 }
+
+aristaSwagHrSystemGroup OBJECT-GROUP
+   OBJECTS {
+      aristaSwagHrSystemUpTime,
+      aristaSwagHrSystemDate,
+      aristaSwagHrSystemNumUsers,
+      aristaSwagHrSystemProcesses,
+      aristaSwagHrSystemMemorySize
+   }
+   STATUS      current
+   DESCRIPTION
+         "The collection of objects for SWAG Hr System table."
+   ::= { aristaSwagHrGroups 1 }
+
+aristaSwagProcessorGroup OBJECT-GROUP
+   OBJECTS {
+      aristaSwagProcessorLoad
+   }
+   STATUS      current
+   DESCRIPTION
+         "The collection of objects for SWAG Hr Per Processor table."
+   ::= { aristaSwagHrGroups 2 }
+
+END
