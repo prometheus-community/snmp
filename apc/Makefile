@@ -23,6 +23,8 @@ PowerNet-MIB:
 	# Patch to replace RFC1213-MIB with SNMPv2-TC.
 	@sed -i.bak -E 's/(DisplayString[[:space:]]*FROM )RFC1213-MIB/\1SNMPv2-TC/' PowerNet-MIB
 	@rm PowerNet-MIB.bak
+	# Patch to add extra index to upsHighPrecBatteryPackTable
+	@patch PowerNet-MIB < upsHighPrecBatteryExtraIndex.patch
 
 .PHONY: clean
 clean:
