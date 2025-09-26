@@ -1,0 +1,176 @@
+-- ARISTA-STORM-CONTROL-MIB: Arista storm control information
+-- Copyright (c) 2023 Arista Networks, Inc.  All rights reserved.
+
+ARISTA-STORM-CONTROL-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY, OBJECT-TYPE,
+    Counter64                          FROM SNMPv2-SMI
+    CounterBasedGauge64                FROM HCNUM-TC
+    MODULE-COMPLIANCE, OBJECT-GROUP    FROM SNMPv2-CONF
+    TEXTUAL-CONVENTION                 FROM SNMPv2-TC
+    aristaMibs                         FROM ARISTA-SMI-MIB
+    ifIndex                            FROM IF-MIB;
+
+aristaStormControlMIB MODULE-IDENTITY
+    LAST-UPDATED "202412190000Z"
+    ORGANIZATION "Arista Networks, Inc."
+    CONTACT-INFO
+        "Arista Networks, Inc.
+
+         Postal: 5453 Great America Parkway
+                 Santa Clara, CA 95054
+
+         Tel: +1 408 547-5500
+
+         E-mail: snmp@arista.com"
+    DESCRIPTION
+            "The MIB module for storm control information on Arista
+            devices."
+    REVISION    "202412190000Z"
+    DESCRIPTION "Adding new AristaStormControlTrafficClass allUnicast."
+    REVISION    "202307240000Z"
+    DESCRIPTION "Initial version."
+    ::= { aristaMibs 35 }
+
+-- Textual Conventions --
+AristaStormControlTrafficClass ::= TEXTUAL-CONVENTION
+    STATUS       current
+    DESCRIPTION
+        "Represents a storm control traffic class."
+    SYNTAX       INTEGER {
+        all(0),
+        broadcast(1),
+        multicast(2),
+        unknownUnicast(3),
+        allUnicast(4)
+    }
+
+AristaStormControlThresholdUnits ::= TEXTUAL-CONVENTION
+    STATUS       current
+    DESCRIPTION
+        "Represents the units for a given storm control threshold level.
+        This textual convention is meant to be used alongside a storm
+        control threshold level."
+    SYNTAX       INTEGER {
+        percent(0), -- Percentage in hundredths of a percent.
+        pps(1),     -- Packets per second.
+        bps(2)      -- Bits per second.
+    }
+
+aristaStormControlMibNotifications OBJECT IDENTIFIER
+    ::= { aristaStormControlMIB 0 }
+
+aristaStormControlMibObjects OBJECT IDENTIFIER
+    ::= { aristaStormControlMIB 1 }
+
+aristaStormControlMibConformance OBJECT IDENTIFIER
+    ::= { aristaStormControlMIB 2 }
+
+-- Objects --
+
+-- Per interface table --
+
+aristaStormControlIfTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF AristaStormControlIfEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table contains information on interfaces with storm control
+        enabled."
+    ::= { aristaStormControlMibObjects 1 }
+
+aristaStormControlIfEntry OBJECT-TYPE
+    SYNTAX      AristaStormControlIfEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "Information applicable to a particular interface for a given
+        traffic class."
+    INDEX       { ifIndex, aristaStormControlIfTrafficClass }
+    ::= { aristaStormControlIfTable 1 }
+
+AristaStormControlIfEntry ::= SEQUENCE {
+   aristaStormControlIfTrafficClass    AristaStormControlTrafficClass,
+   aristaStormControlIfThresholdLevel  CounterBasedGauge64,
+   aristaStormControlIfThresholdUnits  AristaStormControlThresholdUnits,
+   aristaStormControlIfDrops           Counter64
+}
+
+aristaStormControlIfTrafficClass OBJECT-TYPE
+   SYNTAX       AristaStormControlTrafficClass
+   MAX-ACCESS   not-accessible
+   STATUS       current
+   DESCRIPTION
+      "The storm control traffic class for this entry."
+   ::= { aristaStormControlIfEntry 1 }
+
+aristaStormControlIfThresholdLevel OBJECT-TYPE
+   SYNTAX       CounterBasedGauge64
+   MAX-ACCESS   read-only
+   STATUS       current
+   DESCRIPTION
+      "The configured threshold level for this interface and traffic class.
+      In units as specified by aristaStormControlIfThresholdUnits.
+
+      If there is no storm control threshold level configured for this
+      interface and traffic class, the default value of 0 will be used."
+   ::= { aristaStormControlIfEntry 2 }
+
+aristaStormControlIfThresholdUnits OBJECT-TYPE
+   SYNTAX       AristaStormControlThresholdUnits
+   MAX-ACCESS   read-only
+   STATUS       current
+   DESCRIPTION
+      "The units for this entry's aristaStormControlIfThresholdLevel.
+
+      If there is no storm control threshold level configured for this
+      interface and traffic class, the default value of 'percent' will be
+      used."
+   ::= { aristaStormControlIfEntry 3 }
+
+aristaStormControlIfDrops OBJECT-TYPE
+   SYNTAX       Counter64
+   MAX-ACCESS   read-only
+   STATUS       current
+   DESCRIPTION
+      "The number of packets dropped for this interface and traffic class
+      as a result of this entry's storm control threshold level.
+
+      If there is no storm control threshold level configured for this
+      interface and traffic class, the default value of 0 will be used."
+   ::= { aristaStormControlIfEntry 4 }
+
+-- Notifications --
+
+-- Conformance and Compliance --
+aristaStormControlMibCompliances OBJECT IDENTIFIER
+    ::= { aristaStormControlMibConformance 1 }
+
+aristaStormControlMibGroups OBJECT IDENTIFIER
+    ::= { aristaStormControlMibConformance 2 }
+
+aristaStormControlMibCompliance MODULE-COMPLIANCE
+    STATUS     current
+    DESCRIPTION
+        "The compliance statement for Arista switches that implement
+        the ARISTA-STORM-CONTROL-MIB."
+    MODULE     -- this module
+    MANDATORY-GROUPS {
+        aristaStormControlMibInterfaceGroup
+    }
+    ::= { aristaStormControlMibCompliances 1 }
+
+aristaStormControlMibInterfaceGroup OBJECT-GROUP
+    OBJECTS {
+        aristaStormControlIfThresholdLevel,
+        aristaStormControlIfThresholdUnits,
+        aristaStormControlIfDrops
+    }
+    STATUS      current
+    DESCRIPTION
+        "The collection of objects that provide storm control interface
+        information."
+    ::= { aristaStormControlMibGroups 1 }
+
+END

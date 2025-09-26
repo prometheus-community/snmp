@@ -11,17 +11,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include ../Makefile.curl
 
-.PHONY: all
-all:
-	@$(MAKE) -C apc
-	@$(MAKE) -C net-snmp
-	@$(MAKE) -C powercom
-	@$(MAKE) -C arista
+ARISTA_URL := https://www.arista.com/assets/data/docs/MIBS/arista-mibs.zip
+
+all: arista-all
+
+arista-all:
+	@echo ">> Downloading Arista Mibs"
+	@curl $(CURL_OPTS) -o arista-mibs.zip "$(ARISTA_URL)"
+	@unzip -j arista-mibs.zip
+	@rm arista-mibs.zip
+	@rm -rv ._*txt
 
 .PHONY: clean
 clean:
-	@$(MAKE) -C apc clean
-	@$(MAKE) -C net-snmp clean
-	@$(MAKE) -C powercom clean
-	@$(MAKE) -C arista clean
+	rm -rvf ARISTA*txt arista-mibs.zip

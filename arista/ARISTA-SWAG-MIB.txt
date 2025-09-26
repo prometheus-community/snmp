@@ -1,0 +1,257 @@
+-- ARISTA-SWAG-MIB: Arista structure of SWAG information
+-- Copyright (c) 2025 Arista Networks, Inc.  All rights reserved.
+
+ARISTA-SWAG-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+   MODULE-COMPLIANCE, OBJECT-GROUP       FROM SNMPv2-CONF
+   MODULE-IDENTITY, OBJECT-TYPE,
+   Integer32                             FROM SNMPv2-SMI
+   TEXTUAL-CONVENTION                    FROM SNMPv2-TC
+   InterfaceIndex, InterfaceIndexOrZero  FROM IF-MIB
+   aristaMibs                            FROM ARISTA-SMI-MIB;
+
+aristaSwagMIB MODULE-IDENTITY
+   LAST-UPDATED "202501200000Z"
+   ORGANIZATION "Arista Networks, Inc."
+   CONTACT-INFO
+      "Arista Networks, Inc.
+
+         Postal: 5453 Great America Parkway
+                 Santa Clara, CA 95054
+
+         Tel: +1 408 547-5500
+
+         E-mail: snmp@arista.com"
+   DESCRIPTION
+         "The MIB module for reporting SWAG information on Arista devices."
+   REVISION "202501200000Z"
+   DESCRIPTION
+         "Initial version."
+   ::= { aristaMibs 40 }
+
+-- *********************************************************************************
+-- MIB Groups
+-- *********************************************************************************
+
+aristaSwagObjects      OBJECT IDENTIFIER ::= { aristaSwagMIB 1 }
+aristaSwagConformance  OBJECT IDENTIFIER ::= { aristaSwagMIB 2 }
+
+-- *********************************************************************************
+-- TEXTUAL-CONVENTIONS
+-- *********************************************************************************
+
+SwagMemberId ::= TEXTUAL-CONVENTION
+   DISPLAY-HINT "d"
+   STATUS       current
+   DESCRIPTION
+         "A unique value, greater than zero, for each SWAG device.
+          Note that SWAG members are currently limited to a smaller range."
+   SYNTAX     Integer32 (1..256)
+
+SwagReachabilityState ::=  TEXTUAL-CONVENTION
+   STATUS       current
+   DESCRIPTION
+         "The current reachability state of the destination SWAG member.
+          reachable(1)
+            - this state indicates that the destination device has a valid
+              forwarding path from the source device.
+          unreachable(2)
+            - this state indicates that no path exists between the source and
+              destination device."
+   SYNTAX     INTEGER  {
+               configured(1),
+               failed(2),
+               reachable(3),
+               pending(4),
+               stale(5),
+               unreachable(6)
+              }
+
+-- *********************************************************************************
+-- The SWAG interface table
+-- *********************************************************************************
+
+aristaSwagBaIfTable OBJECT-TYPE
+   SYNTAX      SEQUENCE OF AristaSwagBaIfEntry
+   MAX-ACCESS  not-accessible
+   STATUS      current
+   DESCRIPTION
+         "This table contains a list of logical interfaces used by SWAG members to
+          access the backplane network, referred to as Backplane-Channels. Each
+          Backplane-Channel interface is comprised of 1 (or more) front panel
+          interfaces from a given member device. The SWAG member ID of this device
+          is identified as the 'local' SWAG member ID. Each Backplane-Channel
+          interface is directly connected to another member device. The SWAG member
+          ID of this adjacent device is identified as the 'remote' SWAG member ID."
+   ::= { aristaSwagObjects 1 }
+
+aristaSwagBaIfEntry OBJECT-TYPE
+   SYNTAX      AristaSwagBaIfEntry
+   MAX-ACCESS  not-accessible
+   STATUS      current
+   DESCRIPTION
+         "An entry containing the local SWAG member ID of the Backplane-Channel 
+          interface as well as the remote SWAG member ID corresponding to the device
+          that is directly connected to the interface."
+   INDEX   { aristaSwagBaIfIndex }
+   ::= { aristaSwagBaIfTable 1 }
+
+AristaSwagBaIfEntry ::= SEQUENCE {
+   aristaSwagBaIfIndex                 InterfaceIndex,
+   aristaSwagBaIfLocalMemberId         SwagMemberId,
+   aristaSwagBaIfRemoteMemberId        SwagMemberId
+}
+
+aristaSwagBaIfIndex OBJECT-TYPE
+   SYNTAX     InterfaceIndex
+   MAX-ACCESS not-accessible
+   STATUS     current
+   DESCRIPTION
+         "The value of the ifIndex object, defined in IF-MIB for the
+          Backplane-Channel interface."
+   ::= { aristaSwagBaIfEntry 1 }
+
+aristaSwagBaIfLocalMemberId OBJECT-TYPE
+   SYNTAX     SwagMemberId
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "The SWAG member ID of the member to which this Backplane-Channel is
+          associated."
+   ::= { aristaSwagBaIfEntry 2 }
+
+aristaSwagBaIfRemoteMemberId OBJECT-TYPE
+   SYNTAX     SwagMemberId
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "The SWAG member ID of the member to which this Backplane-Channel is
+          configured to be directly connected."
+   ::= { aristaSwagBaIfEntry 3 }
+
+-- *********************************************************************************
+-- The SWAG reachability table
+-- *********************************************************************************
+
+aristaSwagReachabilityTable OBJECT-TYPE
+   SYNTAX   SEQUENCE OF AristaSwagReachabilityEntry
+   MAX-ACCESS  not-accessible
+   STATUS      current
+   DESCRIPTION
+         "This table describes the FIB for each SWAG member in the backplane 
+          network. For each pair of source and destination members, this table
+          indicates the Backplane-Channel interface on the source device used to
+          forward traffic to reach the destination device in the shortest path.
+          Additionally, this table includes the reachability status of the
+          destination device, which indicates whether it is currently reachable from
+          the source device.
+
+          The SWAG backplane network is expected to be a full mesh, with all members
+          able to reach each other. However, due to misconfiguration, it is possible
+          that no path exists between a given source and destination. In this case,
+          no entry will be present in this table. It is also possible for a path to
+          exist but -- due to network events e.g. link or power failures -- be
+          broken, rendering the destination unreachable from the source. 
+          In this case, the entry's aristaSwagReachabilityBaIfIndex will be 0."
+
+   ::= { aristaSwagObjects 2 }
+
+aristaSwagReachabilityEntry OBJECT-TYPE
+   SYNTAX      AristaSwagReachabilityEntry
+   MAX-ACCESS  not-accessible
+   STATUS      current
+   DESCRIPTION
+         "An entry containing the source and destination SWAG member IDs
+          mapped to the corresponding Backplane-Channel interface on the source
+          device used to forward traffic to reach the destination device, along with
+          the destination's reachability status. 
+          The entry's aristaSwagReachabilityBaIfIndex will be greater than 0 if the
+          destination is reachable, and 0 if the destination is unreachable."
+   INDEX   { aristaSwagReachabilitySrcId, aristaSwagReachabilityDestId }
+   ::= { aristaSwagReachabilityTable 1 }
+
+AristaSwagReachabilityEntry ::= SEQUENCE {
+   aristaSwagReachabilitySrcId         SwagMemberId,
+   aristaSwagReachabilityDestId        SwagMemberId,
+   aristaSwagReachabilityBaIfIndex     InterfaceIndexOrZero,
+   aristaSwagReachabilityState         SwagReachabilityState
+}
+
+aristaSwagReachabilitySrcId OBJECT-TYPE
+   SYNTAX     SwagMemberId
+   MAX-ACCESS not-accessible
+   STATUS     current
+   DESCRIPTION
+         "SWAG member ID for the source device from which reachability to a target
+          is analyzed."
+   ::= { aristaSwagReachabilityEntry 1 }
+
+aristaSwagReachabilityDestId OBJECT-TYPE
+   SYNTAX     SwagMemberId
+   MAX-ACCESS not-accessible
+   STATUS     current
+   DESCRIPTION
+         "SWAG member ID for the destination device being reached."
+   ::= { aristaSwagReachabilityEntry 2 }
+
+aristaSwagReachabilityBaIfIndex OBJECT-TYPE
+   SYNTAX     InterfaceIndexOrZero
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "The value of the ifIndex object, defined in IF-MIB for the corresponding
+          Backplane-Channel interface used for reachability. This interface is
+          associated with the device identified by aristaSwagReachabilitySrcId and 
+          will be greater than 0 if the destination is reachable, and 0 if the
+          destination is unreachable."
+   ::= { aristaSwagReachabilityEntry 3 }
+
+aristaSwagReachabilityState OBJECT-TYPE
+   SYNTAX     SwagReachabilityState
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "The reachability status of a destination device."
+   ::= { aristaSwagReachabilityEntry 4 }
+
+-- *********************************************************************************
+-- Conformance Information
+-- *********************************************************************************
+
+aristaSwagCompliances OBJECT IDENTIFIER ::= { aristaSwagConformance 1 }
+aristaSwagGroups      OBJECT IDENTIFIER ::= { aristaSwagConformance 2 }
+
+aristaSwagCompliance MODULE-COMPLIANCE
+   STATUS     current
+   DESCRIPTION
+         "The compliance statement for Arista switches that implement
+          the ARISTA-SWAG-MIB."
+   MODULE     -- this module
+   MANDATORY-GROUPS {
+      aristaSwagIfGroup,
+      aristaSwagReachabilityGroup
+   }
+   ::= { aristaSwagCompliances 1 }
+
+aristaSwagIfGroup OBJECT-GROUP
+   OBJECTS {
+      aristaSwagBaIfLocalMemberId,
+      aristaSwagBaIfRemoteMemberId
+   }
+   STATUS      current
+   DESCRIPTION
+         "The collection of objects for SWAG interface table."
+   ::= { aristaSwagGroups 1 }
+
+aristaSwagReachabilityGroup OBJECT-GROUP
+   OBJECTS {
+      aristaSwagReachabilityBaIfIndex,
+      aristaSwagReachabilityState
+   }
+   STATUS      current
+   DESCRIPTION
+         "The collection of objects for SWAG reachability table."
+   ::= { aristaSwagGroups 2 }
+
+END
