@@ -2,21 +2,21 @@ The MIB defines two indices for the upsHighPrecBatteryPackTable, but the device
 actually returns three which causes errors in the scrape. The third index always
 matches the second in my testing.
 
---- a/apc/PowerNet-MIB
-+++ b/apc/PowerNet-MIB
-@@ -15684,7 +15684,7 @@ upsHighPrecBatteryPackTableSize OBJECT-TYPE
+--- PowerNet-MIB	2026-03-27 09:29:17.427137177 +0100
++++ PowerNet-MIB	2026-03-27 09:33:48.746630460 +0100
+@@ -16150,7 +16150,7 @@
         DESCRIPTION
                 "An entry containing information applicable to a
                 particular battery pack."
 -       INDEX { upsHighPrecBatteryPackIndex, upsHighPrecBatteryCartridgeIndex }
-+       INDEX { upsHighPrecBatteryPackIndex, upsHighPrecBatteryCartridgeIndex, upsHighPrecBatteryExtraIndex }
++       INDEX { upsHighPrecBatteryPackIndex, upsHighPrecBatteryCartridgeIndex, , upsHighPrecBatteryExtraIndex }
         ::= { upsHighPrecBatteryPackTable 1 }
-
+ 
     UPSHighPrecBatteryPackEntry ::= SEQUENCE {
-@@ -15700,6 +15700,15 @@ upsHighPrecBatteryPackTableSize OBJECT-TYPE
+@@ -16166,6 +16166,15 @@
         upsHighPrecBatteryPackCartridgeStatus       OCTET STRING
     }
-
+ 
 +   upsHighPrecBatteryExtraIndex OBJECT-TYPE
 +       SYNTAX     INTEGER
 +       ACCESS     read-only
