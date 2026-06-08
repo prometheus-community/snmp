@@ -1,0 +1,13 @@
+diff --git a/powercom/XPPC-MIB b/powercom/XPPC-MIB
+index 1be86d3..a92f1e8 100644
+--- a/powercom/XPPC-MIB
++++ b/powercom/XPPC-MIB
+@@ -15,7 +15,7 @@ IMPORTS
+         TRAP-TYPE
+                 FROM RFC-1215
+         DisplayString
+-                FROM RFC1213-MIB
++                FROM SNMPv2-TC
+         OBJECT-TYPE
+                 FROM RFC-1212
+         enterprises,

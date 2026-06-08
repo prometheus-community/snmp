@@ -1,0 +1,15 @@
+diff --git a/powercom/XPPC-MIB b/powercom/XPPC-MIB
+index a92f1e8..ea242b4 100644
+--- a/powercom/XPPC-MIB
++++ b/powercom/XPPC-MIB
+@@ -455,8 +455,8 @@ upsBaseBatteryLifeDays OBJECT-TYPE
+ upsBaseUPSFault OBJECT-TYPE
+         SYNTAX INTEGER {
+                         unknown(0),
+-                        UPS Fault(1),
+-                        Normal(2}
++                        fault(1),
++                        normal(2) }
+         ACCESS read-only
+         STATUS mandatory
+         DESCRIPTION

@@ -2,8 +2,8 @@ The MIB defines two indices for the upsHighPrecBatteryPackTable, but the device
 actually returns three which causes errors in the scrape. The third index always
 matches the second in my testing.
 
---- PowerNet-MIB	2026-03-27 09:29:17.427137177 +0100
-+++ PowerNet-MIB	2026-03-27 09:33:48.746630460 +0100
+--- apc/PowerNet-MIB	2026-03-27 09:29:17.427137177 +0100
++++ apc/PowerNet-MIB	2026-03-27 09:33:48.746630460 +0100
 @@ -16150,7 +16150,7 @@
         DESCRIPTION
                 "An entry containing information applicable to a

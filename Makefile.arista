@@ -11,21 +11,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include ../Makefile.curl
+include Makefile.curl
 
-POWERCOM_URL := https://www.upspowercom.com/pcm-img/Card-DA807/Upsmate_PCM.mib
+ARISTA_URL := https://www.arista.com/assets/data/docs/MIBS/arista-mibs.zip
 
-all: XPPC-MIB
+all: arista/.done
 
-XPPC-MIB:
-	@echo ">> Downloading XPPC-MIB"
-	@curl $(CURL_OPTS) -o XPPC-MIB "$(POWERCOM_URL)"
-	# Patch to replace RFC1213-MIB with SNMPv2-TC.
-	@sed -i.bak -E 's/(DisplayString[[:space:]\n]+FROM) RFC1213-MIB/\1 SNMPv2-TC/' XPPC-MIB
-	# Patch to fix malformed mib.
-	@sed -i.bak2 -e 's/Normal(2}/normal(2) }/' -e 's/UPS Fault(/fault(/' XPPC-MIB
-	@rm XPPC-MIB.bak XPPC-MIB.bak2
+arista/.done:
+	@echo ">> Downloading Arista Mibs"
+	@curl $(CURL_OPTS) -o arista-mibs.zip "$(ARISTA_URL)"
+	@unzip -d arista -o -j arista-mibs.zip
+	@rm arista-mibs.zip
+	@rm -rv arista/._*txt
+	@touch $@
 
 .PHONY: clean
 clean:
-	rm -rvf XPPC-MIB
+	rm -rvf arista-mibs.zip arista/ARISTA*txt arista/.done
