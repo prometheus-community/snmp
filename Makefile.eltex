@@ -11,21 +11,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include Makefile.curl
 
-.PHONY: all
-all:
-	@$(MAKE) -f Makefile.apc
-	@$(MAKE) -f Makefile.eltex
-	@$(MAKE) -f Makefile.iana
-	@$(MAKE) -f Makefile.net-snmp
-	@$(MAKE) -f Makefile.powercom
-	@$(MAKE) -f Makefile.arista
+# Source: https://eltex-co.com/download/?product=337 if you need to update the ELTEX_MES_URL
+ELTEX_MES_URL := https://api.eltex-co.com/storage/upload_center/files/43/mibs_10.4.3.4.zip
+
+all: eltex/.done
+
+eltex/.done:
+	@echo ">> Downloading Eltex Mibs"
+	$(eval TMP := $(shell mktemp))
+	@curl $(CURL_OPTS) -o $(TMP) "$(ELTEX_MES_URL)"
+	@unzip -d eltex -o -j $(TMP) fsiss.mib eltex/ELTEX-SMI-ACTUAL.mib eltex/ELTEX-MES-ISS-CPU-UTIL-MIB.mib eltex/ELTEX-MES-ISS-MIB.mib CISCO-QOS-PIB-MIB.mib
+	@rm -v $(TMP)
+	@touch $@
 
 .PHONY: clean
 clean:
-	@$(MAKE) -f Makefile.apc clean
-	@$(MAKE) -f Makefile.eltex clean
-	@$(MAKE) -f Makefile.iana clean
-	@$(MAKE) -f Makefile.net-snmp clean
-	@$(MAKE) -f Makefile.powercom clean
-	@$(MAKE) -f Makefile.arista clean
+	rm -v eltex/* eltex/.done
