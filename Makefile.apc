@@ -11,19 +11,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include ../Makefile.curl
+include Makefile.curl
 
-ARISTA_URL := https://www.arista.com/assets/data/docs/MIBS/arista-mibs.zip
+APC_URL := https://download.schneider-electric.com/files?p_Doc_Ref=APC_POWERNETMIB_EN&p_enDocType=Firmware
 
-all: arista-all
+all: apc/PowerNet-MIB
 
-arista-all:
-	@echo ">> Downloading Arista Mibs"
-	@curl $(CURL_OPTS) -o arista-mibs.zip "$(ARISTA_URL)"
-	@unzip -j arista-mibs.zip
-	@rm arista-mibs.zip
-	@rm -rv ._*txt
+apc/PowerNet-MIB:
+	@echo ">> Downloading PowerNet-MIB"
+	@curl $(CURL_OPTS) -o $@ "$(APC_URL)"
+	# Patch to replace RFC1213-MIB with SNMPv2-TC.
+	@patch $@ < apc/patches/SNMPv2-TC.patch
+	# Patch to add extra index to upsHighPrecBatteryPackTable
+	@patch $@ < apc/patches/upsHighPrecBatteryExtraIndex.patch
 
 .PHONY: clean
 clean:
-	rm -rvf ARISTA*txt arista-mibs.zip
+	rm -rvf $@

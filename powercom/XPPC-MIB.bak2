@@ -455,8 +455,8 @@ upsBaseBatteryLifeDays OBJECT-TYPE
 upsBaseUPSFault OBJECT-TYPE
         SYNTAX INTEGER {
                         unknown(0),
-                        fault(1),
-                        normal(2) }
+                        UPS Fault(1),
+                        Normal(2}
         ACCESS read-only
         STATUS mandatory
         DESCRIPTION

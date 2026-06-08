@@ -14,14 +14,14 @@
 
 .PHONY: all
 all:
-	@$(MAKE) -C apc
-	@$(MAKE) -C net-snmp
-	@$(MAKE) -C powercom
-	@$(MAKE) -C arista
+	@$(MAKE) -f Makefile.apc
+	@$(MAKE) -f Makefile.net-snmp
+	@$(MAKE) -f Makefile.powercom
+	@$(MAKE) -f Makefile.arista
 
 .PHONY: clean
 clean:
-	@$(MAKE) -C apc clean
-	@$(MAKE) -C net-snmp clean
-	@$(MAKE) -C powercom clean
-	@$(MAKE) -C arista clean
+	@$(MAKE) -f Makefile.apc clean
+	@$(MAKE) -f Makefile.net-snmp clean
+	@$(MAKE) -f Makefile.powercom clean
+	@$(MAKE) -f Makefile.arista clean
