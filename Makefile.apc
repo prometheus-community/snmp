@@ -27,4 +27,4 @@ apc/PowerNet-MIB:
 
 .PHONY: clean
 clean:
-	rm -rvf $@
+	rm -rvf apc/PowerNet-MIB
