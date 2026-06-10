@@ -15,6 +15,7 @@
 .PHONY: all
 all:
 	@$(MAKE) -f Makefile.apc
+	@$(MAKE) -f Makefile.iana
 	@$(MAKE) -f Makefile.net-snmp
 	@$(MAKE) -f Makefile.powercom
 	@$(MAKE) -f Makefile.arista
@@ -22,6 +23,7 @@ all:
 .PHONY: clean
 clean:
 	@$(MAKE) -f Makefile.apc clean
+	@$(MAKE) -f Makefile.iana clean
 	@$(MAKE) -f Makefile.net-snmp clean
 	@$(MAKE) -f Makefile.powercom clean
 	@$(MAKE) -f Makefile.arista clean
