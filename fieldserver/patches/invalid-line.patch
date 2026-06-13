@@ -1,0 +1,12 @@
+diff --git a/fieldserver/FServer-Std.MIB b/fieldserver/FServer-Std.MIB
+index 12b11fc..3e3f804 100644
+--- a/fieldserver/FServer-Std.MIB
++++ b/fieldserver/FServer-Std.MIB
+@@ -7,7 +7,6 @@
+ --  1.00aE  13 Dec 11 SSS  Updated for vectors
+ --  1.00aF  22 Feb 12 SSS  Updated trap typ cov, vectors from .51
+ --
+----------------------------------------------------------*/
+ 
+ 
+ FIELDSERVER-STD-MIB-v1-00aF DEFINITIONS ::= BEGIN

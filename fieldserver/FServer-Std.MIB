@@ -1,0 +1,525 @@
+--
+--
+--  1.00aA  31 Mar 09 JCE  Revised FST Standard MIB
+--  1.00aB  30 Apr 09 JCE  Revised FST Standard MIB
+--  1.00aC  20 May 09 JCE  Reworked TRAP varbinds
+--  1.00aD  03 Dec 11 SSS  Updated for vectors
+--  1.00aE  13 Dec 11 SSS  Updated for vectors
+--  1.00aF  22 Feb 12 SSS  Updated trap typ cov, vectors from .51
+--
+
+
+FIELDSERVER-STD-MIB-v1-00aF DEFINITIONS ::= BEGIN
+
+IMPORTS
+enterprises, OBJECT-TYPE, MODULE-IDENTITY
+FROM SNMPv2-SMI
+TRAP-TYPE
+FROM RFC-1215;
+
+fieldservertechnologies MODULE-IDENTITY
+LAST-UPDATED "200905201600Z"
+ORGANIZATION
+"FieldServer Technologies"
+CONTACT-INFO
+"info@fieldserver.com"
+DESCRIPTION
+"FieldServer Technologies"
+::= { enterprises 6347 }
+
+standard OBJECT IDENTIFIER ::= { fieldservertechnologies  2 }
+
+-- define variables used in TRAPS
+
+notificationFields OBJECT IDENTIFIER ::= { standard 1 }
+
+notificationPointType OBJECT-TYPE
+        SYNTAX  INTEGER {       analogInput(1),
+                                analogOutput(2),
+                                analogValue(3),
+                                binaryInput(4),
+                                binaryOutput(5),
+                                binaryValue(6),
+                                stringVector(50),
+                                analogVector(51),
+                                binaryVector(52)
+                        }
+        ACCESS  read-only
+        STATUS  current
+        DESCRIPTION "Identifies the Point Type in a Notification."
+        ::= {notificationFields 1 }
+
+notificationPointIndex OBJECT-TYPE
+        SYNTAX  INTEGER
+        ACCESS  read-only
+        STATUS  current
+        DESCRIPTION "Identifies the Point Index in a Notification."
+        ::= {notificationFields 2 }
+
+notificationPointDescription OBJECT-TYPE
+        SYNTAX  OCTET STRING
+        ACCESS  read-only
+        STATUS  current
+        DESCRIPTION "Description of the Point in a Notification."
+        ::= {notificationFields 3 }
+
+notificationPointValue OBJECT-TYPE
+        SYNTAX  INTEGER
+        ACCESS  read-only
+        STATUS  current
+        DESCRIPTION "Value of the Point in a Notification."
+        ::= {notificationFields 4 }
+
+-- Traps
+
+fstAlarm TRAP-TYPE
+ENTERPRISE fieldservertechnologies
+        VARIABLES {     notificationPointType, notificationPointIndex, notificationPointDescription, notificationPointValue }
+DESCRIPTION
+"Alarm"
+::= 6
+
+fstHiAlarm TRAP-TYPE
+ENTERPRISE fieldservertechnologies
+        VARIABLES {     notificationPointType, notificationPointIndex, notificationPointDescription, notificationPointValue }
+DESCRIPTION
+"High Alarm"
+::= 7
+
+fstLoAlarm TRAP-TYPE
+ENTERPRISE fieldservertechnologies
+        VARIABLES {     notificationPointType, notificationPointIndex, notificationPointDescription, notificationPointValue }
+DESCRIPTION
+"Low Alarm"
+::= 8
+
+fstNormal TRAP-TYPE
+ENTERPRISE fieldservertechnologies
+        VARIABLES {     notificationPointType, notificationPointIndex, notificationPointDescription, notificationPointValue }
+DESCRIPTION
+"Normal"
+::= 9
+
+fstTrouble TRAP-TYPE
+ENTERPRISE fieldservertechnologies
+        VARIABLES {     notificationPointType, notificationPointIndex, notificationPointDescription, notificationPointValue }
+DESCRIPTION
+"Trouble"
+::= 10
+
+fstError TRAP-TYPE
+ENTERPRISE fieldservertechnologies
+        VARIABLES {     notificationPointType, notificationPointIndex, notificationPointDescription, notificationPointValue }
+DESCRIPTION
+"Error"
+::= 11
+
+fstWarning TRAP-TYPE
+ENTERPRISE fieldservertechnologies
+        VARIABLES {     notificationPointType, notificationPointIndex, notificationPointDescription, notificationPointValue }
+DESCRIPTION
+"Warning"
+::= 12
+
+fstCov TRAP-TYPE
+ENTERPRISE fieldservertechnologies
+        VARIABLES {     notificationPointType, notificationPointIndex, notificationPointDescription, notificationPointValue }
+DESCRIPTION
+"Cov"
+::= 13
+
+-- define tables standard analog and binary inputs, outputs and internal values
+
+
+analogInputsTable OBJECT-TYPE
+    SYNTAX   SEQUENCE OF AnalogInputsEntry
+    MAX-ACCESS not-accessible
+    STATUS   current
+    DESCRIPTION
+       "Table of Analog Inputs"
+    ::= { standard 2 }
+
+analogInputsEntry OBJECT-TYPE
+    SYNTAX   AnalogInputsEntry
+    MAX-ACCESS not-accessible
+    STATUS   current
+    DESCRIPTION
+       "Analog Input."
+    INDEX {
+        aiValue,
+        }
+    ::= { analogInputsTable 1 }
+
+AnalogInputsEntry ::=
+    SEQUENCE {
+        aiValue
+            INTEGER,
+        aiDescription
+            OCTET STRING
+             }
+
+aiValue OBJECT-TYPE
+    SYNTAX   INTEGER
+    MAX-ACCESS read-write
+    STATUS   current
+    DESCRIPTION
+       "Value"
+    ::= { analogInputsEntry 1 }
+
+aiDescription OBJECT-TYPE
+    SYNTAX   OCTET STRING
+    MAX-ACCESS read-write
+    STATUS   current
+    DESCRIPTION
+       "Description"
+    ::= { analogInputsEntry 2 }
+
+
+analogOutputsTable OBJECT-TYPE
+    SYNTAX   SEQUENCE OF AnalogOutputsEntry
+    MAX-ACCESS not-accessible
+    STATUS   current
+    DESCRIPTION
+       "Table of Analog Outputs"
+    ::= { standard 3 }
+
+analogOutputsEntry OBJECT-TYPE
+    SYNTAX   AnalogOutputsEntry
+    MAX-ACCESS not-accessible
+    STATUS   current
+    DESCRIPTION
+       "Analog Output."
+    INDEX {
+        aoValue,
+        }
+    ::= { analogOutputsTable 1 }
+
+AnalogOutputsEntry ::=
+    SEQUENCE {
+        aoValue
+            INTEGER,
+        aoDescription
+            OCTET STRING
+             }
+
+aoValue OBJECT-TYPE
+    SYNTAX   INTEGER
+    MAX-ACCESS read-write
+    STATUS   current
+    DESCRIPTION
+       "Value"
+    ::= { analogOutputsEntry 1 }
+
+aoDescription OBJECT-TYPE
+    SYNTAX   OCTET STRING
+    MAX-ACCESS read-write
+    STATUS   current
+    DESCRIPTION
+       "Description"
+    ::= { analogOutputsEntry 2 }
+
+
+analogValuesTable OBJECT-TYPE
+    SYNTAX   SEQUENCE OF AnalogValuesEntry
+    MAX-ACCESS not-accessible
+    STATUS   current
+    DESCRIPTION
+       "Table of Analog Values"
+    ::= { standard 4 }
+
+analogValuesEntry OBJECT-TYPE
+    SYNTAX   AnalogValuesEntry
+    MAX-ACCESS not-accessible
+    STATUS   current
+    DESCRIPTION
+       "Analog Value."
+    INDEX {
+        avValue,
+        }
+    ::= { analogValuesTable 1 }
+
+AnalogValuesEntry ::=
+    SEQUENCE {
+        avValue
+            INTEGER,
+        avDescription
+            OCTET STRING
+             }
+
+avValue OBJECT-TYPE
+    SYNTAX   INTEGER
+    MAX-ACCESS read-write
+    STATUS   current
+    DESCRIPTION
+       "Value"
+    ::= { analogValuesEntry 1 }
+
+avDescription OBJECT-TYPE
+    SYNTAX   OCTET STRING
+    MAX-ACCESS read-write
+    STATUS   current
+    DESCRIPTION
+       "Description"
+    ::= { analogValuesEntry 2 }
+
+
+binaryInputsTable OBJECT-TYPE
+    SYNTAX   SEQUENCE OF BinaryInputsEntry
+    MAX-ACCESS not-accessible
+    STATUS   current
+    DESCRIPTION
+       "Table of Binary Inputs"
+    ::= { standard 5 }
+
+binaryInputsEntry OBJECT-TYPE
+    SYNTAX   BinaryInputsEntry
+    MAX-ACCESS not-accessible
+    STATUS   current
+    DESCRIPTION
+       "Binary Input."
+    INDEX {
+        biValue,
+        }
+    ::= { binaryInputsTable 1 }
+
+BinaryInputsEntry ::=
+    SEQUENCE {
+        biValue
+            INTEGER,
+        biDescription
+            OCTET STRING
+             }
+
+biValue OBJECT-TYPE
+    SYNTAX   INTEGER
+    MAX-ACCESS read-write
+    STATUS   current
+    DESCRIPTION
+       "Value"
+    ::= { binaryInputsEntry 1 }
+
+biDescription OBJECT-TYPE
+    SYNTAX   OCTET STRING
+    MAX-ACCESS read-write
+    STATUS   current
+    DESCRIPTION
+       "Description"
+    ::= { binaryInputsEntry 2 }
+
+
+binaryOutputsTable OBJECT-TYPE
+    SYNTAX   SEQUENCE OF BinaryOutputsEntry
+    MAX-ACCESS not-accessible
+    STATUS   current
+    DESCRIPTION
+       "Table of Binary Outputs"
+    ::= { standard 6 }
+
+binaryOutputsEntry OBJECT-TYPE
+    SYNTAX   BinaryOutputsEntry
+    MAX-ACCESS not-accessible
+    STATUS   current
+    DESCRIPTION
+       "Binary Output."
+    INDEX {
+        boValue,
+        }
+    ::= { binaryOutputsTable 1 }
+
+BinaryOutputsEntry ::=
+    SEQUENCE {
+        boValue
+            INTEGER,
+        boDescription
+            OCTET STRING
+             }
+
+boValue OBJECT-TYPE
+    SYNTAX   INTEGER
+    MAX-ACCESS read-write
+    STATUS   current
+    DESCRIPTION
+       "Value"
+    ::= { binaryOutputsEntry 1 }
+
+boDescription OBJECT-TYPE
+    SYNTAX   OCTET STRING
+    MAX-ACCESS read-write
+    STATUS   current
+    DESCRIPTION
+       "Description"
+    ::= { binaryOutputsEntry 2 }
+
+
+binaryValuesTable OBJECT-TYPE
+    SYNTAX   SEQUENCE OF BinaryValuesEntry
+    MAX-ACCESS not-accessible
+    STATUS   current
+    DESCRIPTION
+       "Table of Binary Values"
+    ::= { standard 7 }
+
+binaryValuesEntry OBJECT-TYPE
+    SYNTAX   BinaryValuesEntry
+    MAX-ACCESS not-accessible
+    STATUS   current
+    DESCRIPTION
+       "Binary Value."
+    INDEX {
+        bvValue,
+        }
+    ::= { binaryValuesTable 1 }
+
+BinaryValuesEntry ::=
+    SEQUENCE {
+        bvValue
+            INTEGER,
+        bvDescription
+            OCTET STRING
+             }
+
+bvValue OBJECT-TYPE
+    SYNTAX   INTEGER
+    MAX-ACCESS read-write
+    STATUS   current
+    DESCRIPTION
+       "Value"
+    ::= { binaryValuesEntry 1 }
+
+bvDescription OBJECT-TYPE
+    SYNTAX   OCTET STRING
+    MAX-ACCESS read-write
+    STATUS   current
+    DESCRIPTION
+       "Description"
+    ::= { binaryValuesEntry 2 }
+
+stringVectorTable OBJECT-TYPE
+    SYNTAX   SEQUENCE OF StringVectorEntry
+    MAX-ACCESS not-accessible
+    STATUS   current
+    DESCRIPTION
+       "Table of String Vectors"
+    ::= { standard 51 }
+
+stringVectorEntry OBJECT-TYPE
+    SYNTAX   StringVectorEntry
+    MAX-ACCESS not-accessible
+    STATUS   current
+    DESCRIPTION
+       "String Vector Value."
+    INDEX {
+        stringVectorValue
+        }
+    ::= { stringVectorTable 1 }
+
+StringVectorEntry ::=
+    SEQUENCE {
+        stringVectorValue
+            OCTET STRING
+             }
+
+stringVectorValue OBJECT-TYPE
+    SYNTAX   OCTET STRING
+    MAX-ACCESS read-write
+    STATUS   current
+    DESCRIPTION
+       "Value"
+    ::= { stringVectorEntry 1 }
+
+
+analogVectorTable OBJECT-TYPE
+    SYNTAX   SEQUENCE OF AnalogVectorEntry
+    MAX-ACCESS not-accessible
+    STATUS   current
+    DESCRIPTION
+       "Table of Analog Vectors"
+    ::= { standard 52 }
+
+analogVectorEntry OBJECT-TYPE
+    SYNTAX   AnalogVectorEntry
+    MAX-ACCESS not-accessible
+    STATUS   current
+    DESCRIPTION
+       "Analog Vector Value."
+    INDEX {
+        analogVectorValue,
+        analogVectorDescription
+        }
+    ::= { analogVectorTable 1 }
+
+AnalogVectorEntry ::=
+    SEQUENCE {
+        analogVectorValue
+            INTEGER,
+        analogVectorDescription
+            OCTET STRING
+             }
+
+analogVectorValue OBJECT-TYPE
+    SYNTAX   INTEGER
+    MAX-ACCESS read-write
+    STATUS   current
+    DESCRIPTION
+       "Value"
+    ::= { analogVectorEntry 1 }
+
+analogVectorDescription OBJECT-TYPE
+    SYNTAX   OCTET STRING
+    MAX-ACCESS read-write
+    STATUS   current
+    DESCRIPTION
+       "Description"
+    ::= { analogVectorEntry 2 }
+
+binaryVectorTable OBJECT-TYPE
+    SYNTAX   SEQUENCE OF BinaryVectorEntry
+    MAX-ACCESS not-accessible
+    STATUS   current
+    DESCRIPTION
+       "Table of Binary Vectors"
+    ::= { standard 53 }
+
+binaryVectorEntry OBJECT-TYPE
+    SYNTAX   BinaryVectorEntry
+    MAX-ACCESS not-accessible
+    STATUS   current
+    DESCRIPTION
+       "Binary Vector Value."
+    INDEX {
+        binaryVectorValue,
+        binaryVectorDescription
+        }
+    ::= { binaryVectorTable 1 }
+
+BinaryVectorEntry ::=
+    SEQUENCE {
+        binaryVectorValue
+            INTEGER,
+        binaryVectorDescription
+            OCTET STRING
+             }
+
+binaryVectorValue OBJECT-TYPE
+    SYNTAX   INTEGER
+    MAX-ACCESS read-write
+    STATUS   current
+    DESCRIPTION
+       "Value"
+    ::= { binaryVectorEntry 1 }
+
+binaryVectorDescription OBJECT-TYPE
+    SYNTAX   OCTET STRING
+    MAX-ACCESS read-write
+    STATUS   current
+    DESCRIPTION
+       "Description"
+    ::= { binaryVectorEntry 2 }
+
+END
+
+
+
+
+
+
