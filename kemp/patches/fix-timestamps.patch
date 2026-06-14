@@ -1,0 +1,18 @@
+diff --git a/kemp/7.2.50.0.18765.RELEASE-B100-MIB.txt b/kemp/7.2.50.0.18765.RELEASE-B100-MIB.txt
+index a57a3aa..765e401 100644
+--- a/kemp/7.2.50.0.18765.RELEASE-B100-MIB.txt
++++ b/kemp/7.2.50.0.18765.RELEASE-B100-MIB.txt
+@@ -14,11 +14,11 @@ IMPORTS
+ 	FROM ONE4NET-MIB;
+ 
+ b100 MODULE-IDENTITY
+-	LAST-UPDATED "20191120153015Z"
++	LAST-UPDATED "201911201530Z"
+ 	ORGANIZATION "Kemp Technologies"
+ 	CONTACT-INFO "email: supportteam@kemptechnologies.com"
+ 	DESCRIPTION "LoadMaster configuration."
+-	REVISION "20191120153015Z"
++	REVISION "201911201530Z"
+ 	DESCRIPTION "Version 1.26"
+ 	::= { one4net 13 }
+ 
