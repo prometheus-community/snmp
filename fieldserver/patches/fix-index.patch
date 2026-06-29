@@ -1,0 +1,52 @@
+diff --git a/fieldserver/FServer-Std.MIB b/fieldserver/FServer-Std.MIB
+index 3e3f804..185be4f 100644
+--- a/fieldserver/FServer-Std.MIB
++++ b/fieldserver/FServer-Std.MIB
+@@ -147,7 +147,6 @@ analogInputsEntry OBJECT-TYPE
+        "Analog Input."
+     INDEX {
+         aiValue,
+-        aiDescription
+         }
+     ::= { analogInputsTable 1 }
+ 
+@@ -192,7 +191,6 @@ analogOutputsEntry OBJECT-TYPE
+        "Analog Output."
+     INDEX {
+         aoValue,
+-        aoDescription
+         }
+     ::= { analogOutputsTable 1 }
+ 
+@@ -237,7 +235,6 @@ analogValuesEntry OBJECT-TYPE
+        "Analog Value."
+     INDEX {
+         avValue,
+-        avDescription
+         }
+     ::= { analogValuesTable 1 }
+ 
+@@ -282,7 +279,6 @@ binaryInputsEntry OBJECT-TYPE
+        "Binary Input."
+     INDEX {
+         biValue,
+-        biDescription
+         }
+     ::= { binaryInputsTable 1 }
+ 
+@@ -327,7 +323,6 @@ binaryOutputsEntry OBJECT-TYPE
+        "Binary Output."
+     INDEX {
+         boValue,
+-        boDescription
+         }
+     ::= { binaryOutputsTable 1 }
+ 
+@@ -372,7 +367,6 @@ binaryValuesEntry OBJECT-TYPE
+        "Binary Value."
+     INDEX {
+         bvValue,
+-        bvDescription
+         }
+     ::= { binaryValuesTable 1 }
+ 
