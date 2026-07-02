@@ -13,8 +13,8 @@
 
 include Makefile.curl
 
-# Source: https://eltex-co.com/download/?product=337 if you need to update the ELTEX_MES_URL
-ELTEX_MES_URL := https://api.eltex-co.com/storage/upload_center/files/43/mibs_10.4.3.4.zip
+# Source: https://eltex-co.com/product/ethernet_access_switch_mes2448b/#docsAndFiles if you need to update the ELTEX_MES_URL
+ELTEX_MES_URL := https://api.eltex-co.com/storage/upload_center/files/43/mibs_10.4.4.zip
 
 all: eltex/.done
 
