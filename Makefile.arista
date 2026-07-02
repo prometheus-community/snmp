@@ -22,7 +22,6 @@ arista/.done:
 	@curl $(CURL_OPTS) -o arista-mibs.zip "$(ARISTA_URL)"
 	@unzip -d arista -o -j arista-mibs.zip
 	@rm arista-mibs.zip
-	@rm -rv arista/._*txt
 	@touch $@
 
 .PHONY: clean
