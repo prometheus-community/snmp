@@ -1,0 +1,267 @@
+-- ARISTA-POLICING-MIB: Arista structure of policing information
+-- Copyright (c) 2025 Arista Networks, Inc.  All rights reserved.
+
+ARISTA-POLICING-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+   MODULE-COMPLIANCE, OBJECT-GROUP      FROM SNMPv2-CONF
+   MODULE-IDENTITY, OBJECT-TYPE         FROM SNMPv2-SMI
+   CounterBasedGauge64                  FROM HCNUM-TC
+   DisplayString, TEXTUAL-CONVENTION    FROM SNMPv2-TC
+   aristaMibs                           FROM ARISTA-SMI-MIB;
+
+aristaPolicingMib MODULE-IDENTITY
+    LAST-UPDATED "202504220000Z"
+    ORGANIZATION "Arista Networks, Inc."
+    CONTACT-INFO
+        "Arista Networks, Inc.
+
+         Postal: 5453 Great America Parkway
+                 Santa Clara, CA 95054
+
+         Tel: +1 408 547-5500
+
+         E-mail: snmp@arista.com"
+    DESCRIPTION
+        "The MIB module for reporting policing configuration on Arista devices."
+    REVISION  "202504220000Z"
+    DESCRIPTION
+       "The initial revision of this MIB module."
+    ::= { aristaMibs 42 }
+   
+-- Textual Conventions
+AristaPolicingProfileRateUnit ::= TEXTUAL-CONVENTION
+   STATUS       current
+   DESCRIPTION
+      "Represents the unit for the information rate limits in policing.
+
+       invalid(0) - The invalid rate unit.
+       pps(1) - The rate expressed in units of packets per second.
+       bps(2) - The rate expressed in units of bits per second.
+       kbps(3) - The rate expressed in units of kilobits per second.
+       mbps(4) - The rate expressed in units of megabits per second."
+   SYNTAX       INTEGER {
+                   invalid(0),
+                   pps(1),
+                   bps(2),
+                   kbps(3),
+                   mbps(4)
+                }
+
+AristaPolicingProfileBurstUnit ::= TEXTUAL-CONVENTION
+   STATUS       current
+   DESCRIPTION
+      "Represents the unit for the burst size limits in policing.
+
+       packets(1) - The burst size expressed in units of packets.
+       bytes(2) - The burst size expressed in units of bytes.
+       kbytes(3) - The burst size expressed in units of kilobytes. 
+       mbytes(4) - The burst size expressed in units of megabytes."
+   SYNTAX       INTEGER {
+                   packets(1),
+                   bytes(2),
+                   kbytes(3),
+                   mbytes(4)
+                }
+
+-- MIB groups
+aristaPolicingMibObjects OBJECT IDENTIFIER ::= { aristaPolicingMib 1 }
+aristaPolicingMibConformance OBJECT IDENTIFIER ::= { aristaPolicingMib 2 }
+
+-- Policing profile information
+aristaPolicingProfileTable OBJECT-TYPE
+   SYNTAX       SEQUENCE OF AristaPolicingProfileTableEntry
+   MAX-ACCESS   not-accessible
+   STATUS       current
+   DESCRIPTION
+      "A table that contains policing profiles and their associated configuration
+       information."
+   ::= { aristaPolicingMibObjects 1 }
+
+aristaPolicingProfileTableEntry OBJECT-TYPE
+   SYNTAX       AristaPolicingProfileTableEntry
+   MAX-ACCESS   not-accessible
+   STATUS       current
+   DESCRIPTION
+      "An entry that contains policing profile configuration information. If a given
+       policing rate limit is not configured or used, the value of the corresponding
+       MIB object will be zero."
+   INDEX {
+      aristaPolicingProfileName
+   }
+   ::= { aristaPolicingProfileTable 1 }
+
+AristaPolicingProfileTableEntry ::= SEQUENCE {
+   -- Index
+   aristaPolicingProfileName           DisplayString,
+   -- Parameters
+   aristaPolicingProfileCir            CounterBasedGauge64,
+   aristaPolicingProfileBc             CounterBasedGauge64,
+   aristaPolicingProfilePir            CounterBasedGauge64,
+   aristaPolicingProfileBe             CounterBasedGauge64,
+   aristaPolicingProfileCirUnit        AristaPolicingProfileRateUnit, 
+   aristaPolicingProfileBcUnit         AristaPolicingProfileBurstUnit,
+   aristaPolicingProfilePirUnit        AristaPolicingProfileRateUnit,
+   aristaPolicingProfileBeUnit         AristaPolicingProfileBurstUnit
+}
+
+aristaPolicingProfileName OBJECT-TYPE 
+   SYNTAX       DisplayString(SIZE(1..64))
+   MAX-ACCESS   not-accessible
+   STATUS       current
+   DESCRIPTION
+      "Name of the policing profile."
+   ::= { aristaPolicingProfileTableEntry 1 }
+
+aristaPolicingProfileCir OBJECT-TYPE 
+   SYNTAX       CounterBasedGauge64 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Committed information rate configured in the policing profile."
+   ::= { aristaPolicingProfileTableEntry 2 }
+
+aristaPolicingProfileBc OBJECT-TYPE 
+   SYNTAX       CounterBasedGauge64 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Committed burst size configured in the policing profile."
+   ::= { aristaPolicingProfileTableEntry 3 }
+
+aristaPolicingProfilePir OBJECT-TYPE 
+   SYNTAX       CounterBasedGauge64 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Peak information rate configured in the policing profile."
+   ::= { aristaPolicingProfileTableEntry 4 }
+
+aristaPolicingProfileBe OBJECT-TYPE 
+   SYNTAX       CounterBasedGauge64 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Peak burst size configured in the policing profile."
+   ::= { aristaPolicingProfileTableEntry 5 }
+
+aristaPolicingProfileCirUnit OBJECT-TYPE 
+   SYNTAX       AristaPolicingProfileRateUnit 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Committed information rate unit configured in the policing profile."
+   ::= { aristaPolicingProfileTableEntry 6 }
+
+aristaPolicingProfileBcUnit OBJECT-TYPE 
+   SYNTAX       AristaPolicingProfileBurstUnit 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Committed burst size unit configured in the policing profile."
+   ::= { aristaPolicingProfileTableEntry 7 }
+
+aristaPolicingProfilePirUnit OBJECT-TYPE 
+   SYNTAX       AristaPolicingProfileRateUnit 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Peak information rate unit configured in the policing profile."
+   ::= { aristaPolicingProfileTableEntry 8 }
+
+aristaPolicingProfileBeUnit OBJECT-TYPE 
+   SYNTAX       AristaPolicingProfileBurstUnit 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Peak burst size unit configured in the policing profile."
+   ::= { aristaPolicingProfileTableEntry 9 }
+
+-- Policer information
+aristaPolicerInstanceTable OBJECT-TYPE
+   SYNTAX       SEQUENCE OF AristaPolicerInstanceTableEntry 
+   MAX-ACCESS   not-accessible
+   STATUS       current
+   DESCRIPTION
+       "A table that contains policer names and their associated policing
+        profile. Every policing profile name referenced by policers in this
+        table will also appear in the aristaPolicingProfileTable."
+   ::= { aristaPolicingMibObjects 2 }
+
+aristaPolicerInstanceTableEntry OBJECT-TYPE
+   SYNTAX       AristaPolicerInstanceTableEntry
+   MAX-ACCESS  not-accessible
+   STATUS       current
+   DESCRIPTION
+      "An entry that contains the associated policing profile name for a
+       policer."
+   INDEX {
+      aristaPolicerInstanceName
+   }
+   ::= { aristaPolicerInstanceTable 1 }
+
+AristaPolicerInstanceTableEntry ::= SEQUENCE {
+   -- Index
+   aristaPolicerInstanceName           DisplayString,
+   -- Parameters
+   aristaPolicerInstanceProfileName    DisplayString
+}
+
+aristaPolicerInstanceName OBJECT-TYPE
+   SYNTAX       DisplayString(SIZE(1..64))
+   MAX-ACCESS   not-accessible
+   STATUS       current
+   DESCRIPTION
+      "The name of the policer."
+   ::= { aristaPolicerInstanceTableEntry 1 }
+
+aristaPolicerInstanceProfileName OBJECT-TYPE
+   SYNTAX       DisplayString(SIZE(1..64))
+   MAX-ACCESS   read-only  
+   STATUS       current
+   DESCRIPTION
+      "The policing profile name associated with the policer."
+   ::= { aristaPolicerInstanceTableEntry 2 }
+
+-- Conformance
+aristaPolicingCompliances OBJECT IDENTIFIER ::= { aristaPolicingMibConformance 1 }
+aristaPolicingGroups OBJECT IDENTIFIER ::= { aristaPolicingMibConformance 2 }
+
+aristaPolicingCompliance MODULE-COMPLIANCE
+   STATUS     current
+   DESCRIPTION
+      "The compliance statement for Arista switches that implement
+       the ARISTA-POLICING-MIB."
+   MODULE     -- this module
+   MANDATORY-GROUPS {
+      aristaPolicingProfileGroup,
+      aristaPolicerInstanceGroup
+   }
+   ::= { aristaPolicingCompliances 1 }
+
+aristaPolicingProfileGroup OBJECT-GROUP
+   OBJECTS {
+      aristaPolicingProfileCir, 
+      aristaPolicingProfileBc, 
+      aristaPolicingProfilePir,
+      aristaPolicingProfileBe,
+      aristaPolicingProfileCirUnit, 
+      aristaPolicingProfileBcUnit,
+      aristaPolicingProfilePirUnit,
+      aristaPolicingProfileBeUnit 
+   }
+   STATUS       current
+   DESCRIPTION
+      "The collection of objects for policing profile configuration information."
+   ::= { aristaPolicingGroups 1 }
+
+aristaPolicerInstanceGroup OBJECT-GROUP
+   OBJECTS {
+      aristaPolicerInstanceProfileName
+   }
+   STATUS       current
+   DESCRIPTION
+      "The collection of objects for policer instance configuration information."
+   ::= { aristaPolicingGroups 2 }
+
+END

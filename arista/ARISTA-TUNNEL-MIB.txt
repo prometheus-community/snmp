@@ -11,7 +11,7 @@ IMPORTS
     ifIndex                            FROM IF-MIB;
 
 aristaTunnelMIB MODULE-IDENTITY
-    LAST-UPDATED "202309200000Z"
+    LAST-UPDATED "202505210000Z"
     ORGANIZATION "Arista Networks, Inc."
     CONTACT-INFO
         "Arista Networks, Inc.
@@ -25,6 +25,8 @@ aristaTunnelMIB MODULE-IDENTITY
     DESCRIPTION
             "The MIB module for additional tunnel information on Arista
             devices."
+    REVISION    "202505210000Z"
+    DESCRIPTION "Add notKeyLenAligned"
     REVISION    "202309200000Z"
     DESCRIPTION "Add ikeVersionUnsupportedWithVrf"
     REVISION    "202208240000Z"
@@ -57,6 +59,9 @@ AristaIpsecTunnelConnectionState ::= TEXTUAL-CONVENTION
         ikeVersionUnsupportedWithVrf(7)  The configuration is unsupported
                                          because tunnels with non-default
                                          underlay VRFs only allow IKE version 2.
+        notKeyLenAligned(8)              The configuration is unsupported
+                                         the encryption key length of IKE is smaller
+                                         than encryption key length of IPsec.
         "
     SYNTAX       INTEGER {
         unknown(0),
@@ -66,7 +71,8 @@ AristaIpsecTunnelConnectionState ::= TEXTUAL-CONVENTION
         shut(4),
         fipsUnsupported(5),
         connected(6),
-        ikeVersionUnsupportedWithVrf(7)
+        ikeVersionUnsupportedWithVrf(7),
+        notKeyLenAligned(8)
     }
 
 aristaTunnelMibNotifications OBJECT IDENTIFIER

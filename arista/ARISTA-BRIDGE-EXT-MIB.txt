@@ -7,12 +7,13 @@ IMPORTS
     MODULE-COMPLIANCE, OBJECT-GROUP,
     NOTIFICATION-GROUP                 FROM SNMPv2-CONF
     dot1qFdbId, dot1qTpFdbAddress,
-    dot1qTpFdbPort                     FROM Q-BRIDGE-MIB
+    dot1qTpFdbPort, VlanIdOrNone       FROM Q-BRIDGE-MIB
+    dot1dBasePort                      FROM BRIDGE-MIB
     TimeFilter                         FROM RMON2-MIB
     aristaMibs                         FROM ARISTA-SMI-MIB;
 
 aristaBridgeExtMIB MODULE-IDENTITY
-    LAST-UPDATED "202009290000Z"
+    LAST-UPDATED "202512190000Z"
     ORGANIZATION "Arista Networks, Inc."
     CONTACT-INFO
         "Arista Networks, Inc.
@@ -25,6 +26,12 @@ aristaBridgeExtMIB MODULE-IDENTITY
          E-mail: snmp@arista.com"
     DESCRIPTION
            "This MIB contains extensions to the BRIDGE-MIB."
+    REVISION      "202512190000Z"
+    DESCRIPTION
+           "Added aristaPortVlanTable."
+    REVISION      "202506200000Z"
+    DESCRIPTION
+           "Added aristaSwitchForwardingMode."
     REVISION      "202009290000Z"
     DESCRIPTION
            "Added aristaMacStatsTable."
@@ -149,6 +156,68 @@ aristaMacStatsEntries OBJECT-TYPE
         given bridging domain."
     ::= { aristaMacStatsEntry 2 }
 
+aristaBridgeExtScalars OBJECT IDENTIFIER ::= { aristaBridgeExtMIB 4 }
+
+aristaSwitchForwardingMode OBJECT-TYPE
+    SYNTAX      INTEGER { 
+                 defaultMode(1),
+                 cutThrough(2),
+                 storeAndForward(3) 
+                }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The packet forwarding mode of this system."
+    ::= { aristaBridgeExtScalars 1 }
+
+-- Port VLAN configuration table
+
+aristaPortVlanTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF AristaPortVlanEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table is an extension to dot1dBasePortTable providing per-port VLAN
+        configuration information."
+    ::= { aristaBridgeExtMIB 5 }
+
+aristaPortVlanEntry OBJECT-TYPE
+    SYNTAX      AristaPortVlanEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "VLAN configuration information for a specific port on this device."
+    INDEX   { dot1dBasePort }
+    ::= { aristaPortVlanTable 1 }
+
+AristaPortVlanEntry ::=
+    SEQUENCE {
+        aristaSwitchportMode   INTEGER,
+        aristaPhoneVlanId      VlanIdOrNone
+    }
+
+aristaSwitchportMode OBJECT-TYPE
+    SYNTAX      INTEGER {
+                    access(1),
+                    trunk(2),
+                    dot1qTunnel(3),
+                    other(4)
+                }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The switchport mode for this port."
+    ::= { aristaPortVlanEntry 1 }
+
+aristaPhoneVlanId OBJECT-TYPE
+    SYNTAX      VlanIdOrNone
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The VLAN ID of the phone VLAN configured on this port. A value of 0
+        indicates that no phone VLAN is configured."
+    ::= { aristaPortVlanEntry 2 }
+
 -- Notifications
 
 aristaMacMove NOTIFICATION-TYPE
@@ -196,12 +265,15 @@ aristaBridgeExtBaseGroup OBJECT-GROUP
     OBJECTS {
         aristaDot1qTpFdbNumMoves,
         aristaDot1qTpFdbLastMove,
-        aristaMacStatsEntries
+        aristaMacStatsEntries,
+        aristaSwitchForwardingMode,
+        aristaSwitchportMode,
+        aristaPhoneVlanId
     }
     STATUS      current
     DESCRIPTION
-        "A collection of objects providing MAC move count and times, and
-        MAC counts per entry type."
+        "A collection of objects providing MAC move count and times,
+        MAC counts per entry type, and port VLAN configuration."
     ::= { aristaBridgeExtGroups 1 }
 
 aristaBridgeExtNotificationGroup NOTIFICATION-GROUP

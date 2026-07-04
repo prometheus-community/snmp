@@ -15,7 +15,7 @@ IMPORTS
     QueueIndex                           FROM ARISTA-QUEUE-MIB;
     
 aristaQosMib MODULE-IDENTITY
-    LAST-UPDATED "202411050000Z"
+    LAST-UPDATED "202603190000Z"
     ORGANIZATION "Arista Networks, Inc."
     CONTACT-INFO
         "Arista Networks, Inc.
@@ -55,6 +55,9 @@ aristaQosMib MODULE-IDENTITY
 	 classified as belonging to a particular class. Actions may include
 	 modifying CoS or DSCP fields, assigning to traffic-class queues,
 	 shaping, or filtering."
+
+    REVISION      "202603190000Z"
+    DESCRIPTION   "Updated the description for aristaEcnQueuePktsMarked"
 
     REVISION      "202411050000Z"
     DESCRIPTION   "Added aristaEcnQueuePktsLocallyMarked"
@@ -716,14 +719,16 @@ aristaEcnQueueCounterEnabled OBJECT-TYPE
         for the interface and queue; otherwise, the value is
         'false(2)'."
     ::= { aristaEcnQueueCounterEntry 3 }
-    
+
 aristaEcnQueuePktsMarked OBJECT-TYPE
     SYNTAX      Counter64
     MAX-ACCESS  read-only
     STATUS      current
-    DESCRIPTION    
-	"The number of Ecn marked packets from this egress queue. if
-	Ecn counter is not enabled, the counter value is 0"
+    DESCRIPTION
+	"On XGS chipsets: the number of packets that egressed this queue with an ECN
+        codepoint of CE. On other chipsets: the number of packets experiencing
+        congestion when enqueued that would result in ECN marking, regardless of its
+        ECN codepoint. If ECN counter is not enabled, the counter value is 0."
     ::= { aristaEcnQueueCounterEntry 4 }
 
 aristaEcnQueuePktsLocallyMarked OBJECT-TYPE
