@@ -7,13 +7,13 @@ IMPORTS
    MODULE-COMPLIANCE, OBJECT-GROUP              FROM SNMPv2-CONF
    MODULE-IDENTITY, OBJECT-TYPE,
    Integer32, Gauge32, TimeTicks, Unsigned32    FROM SNMPv2-SMI
-   DateAndTime                                  FROM SNMPv2-TC
+   DateAndTime, AutonomousType, DisplayString   FROM SNMPv2-TC
    SwagMemberId                                 FROM ARISTA-SWAG-MIB
    KBytes                                       FROM HOST-RESOURCES-MIB
    aristaMibs                                   FROM ARISTA-SMI-MIB;
 
 aristaSwagHostResourcesMIB MODULE-IDENTITY
-   LAST-UPDATED "202503120000Z"
+   LAST-UPDATED "202511180000Z"
    ORGANIZATION "Arista Networks, Inc."
    CONTACT-INFO
       "Arista Networks, Inc.
@@ -27,6 +27,14 @@ aristaSwagHostResourcesMIB MODULE-IDENTITY
    DESCRIPTION
          "The MIB module for reporting SWAG system level information on Arista
           devices."
+   REVISION "202511180000Z"
+   DESCRIPTION
+         "Expanded the range for aristaSwagStorageAllocUnits, aristaSwagStorageSize,
+          and aristaSwagStorageUsed columns in aristaSwagStorageTable to include 0
+          as a valid value."
+   REVISION "202508020000Z"
+   DESCRIPTION
+         "Added aristaSwagStorageTable."
    REVISION "202503120000Z"
    DESCRIPTION
          "Initial version."
@@ -176,6 +184,103 @@ aristaSwagProcessorLoad OBJECT-TYPE
    ::= { aristaSwagProcessorEntry 3 }
 
 -- *********************************************************************************
+-- The SWAG Storage table
+-- *********************************************************************************
+
+aristaSwagStorageTable OBJECT-TYPE
+   SYNTAX     SEQUENCE OF AristaSwagStorageEntry
+   MAX-ACCESS not-accessible
+   STATUS     current
+   DESCRIPTION
+         "This table describes the logical storage areas of each member in the SWAG
+          that this device is part of."
+   ::= { aristaSwagHrObjects 3 }
+
+aristaSwagStorageEntry OBJECT-TYPE
+   SYNTAX     AristaSwagStorageEntry
+   MAX-ACCESS not-accessible
+   STATUS     current
+   DESCRIPTION
+         "A (conceptual) entry for one logical storage area on a SWAG member."
+   INDEX { aristaSwagStorageMemberId, aristaSwagStorageIndex }
+   ::= { aristaSwagStorageTable 1 }
+
+AristaSwagStorageEntry ::= SEQUENCE {
+   aristaSwagStorageMemberId             SwagMemberId,
+   aristaSwagStorageIndex                Integer32,
+   aristaSwagStorageType                 AutonomousType,
+   aristaSwagStorageDescr                DisplayString,
+   aristaSwagStorageAllocUnits           Integer32,
+   aristaSwagStorageSize                 Integer32,
+   aristaSwagStorageUsed                 Integer32
+}
+
+aristaSwagStorageMemberId OBJECT-TYPE
+   SYNTAX     SwagMemberId
+   MAX-ACCESS not-accessible
+   STATUS     current
+   DESCRIPTION
+         "SWAG member ID this entry corresponds to."
+   ::= { aristaSwagStorageEntry 1 }
+
+aristaSwagStorageIndex OBJECT-TYPE
+   SYNTAX     Integer32 (1..2147483647)
+   MAX-ACCESS not-accessible
+   STATUS     current
+   DESCRIPTION
+         "A unique value for each logical storage area contained by the host."
+   ::= { aristaSwagStorageEntry 2 }
+
+aristaSwagStorageType OBJECT-TYPE
+   SYNTAX     AutonomousType
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "The type of storage represented by this entry. See hrStorageTypes in
+          HOST-RESOURCES-TYPES module for all available storage types."
+   ::= { aristaSwagStorageEntry 3 }
+
+aristaSwagStorageDescr OBJECT-TYPE
+   SYNTAX     DisplayString
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "A description of the type and instance of the storage described by this
+          entry."
+   ::= { aristaSwagStorageEntry 4 }
+
+aristaSwagStorageAllocUnits OBJECT-TYPE
+   SYNTAX     Integer32 (0..2147483647)
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "The size, in bytes, of the data objects allocated from this pool. If this
+          entry is monitoring sectors, blocks, buffers, or packets, for example,
+          this number will commonly be greater than one. Otherwise this number will
+          be one. This number will be 0 if there is an error collecting the allocation
+          units."
+   ::= { aristaSwagStorageEntry 5 }
+
+aristaSwagStorageSize OBJECT-TYPE
+   SYNTAX     Integer32 (0..2147483647)
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "The size of the storage represented by this entry, in units of
+          aristaSwagStorageAllocUnits."
+   ::= { aristaSwagStorageEntry 6 }
+
+aristaSwagStorageUsed OBJECT-TYPE
+   SYNTAX     Integer32 (0..2147483647)
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "The amount of storage represented by this entry that is allocated, in
+          units of aristaSwagStorageAllocUnits."
+   ::= { aristaSwagStorageEntry 7 }
+
+
+-- *********************************************************************************
 -- Conformance Information
 -- *********************************************************************************
 
@@ -190,7 +295,8 @@ aristaSwagHrCompliance MODULE-COMPLIANCE
    MODULE     -- this module
    MANDATORY-GROUPS {
       aristaSwagHrSystemGroup,
-      aristaSwagProcessorGroup
+      aristaSwagProcessorGroup,
+      aristaSwagStorageGroup
    }
    ::= { aristaSwagHrCompliances 1 }
 
@@ -215,5 +321,18 @@ aristaSwagProcessorGroup OBJECT-GROUP
    DESCRIPTION
          "The collection of objects for SWAG Hr Per Processor table."
    ::= { aristaSwagHrGroups 2 }
+
+aristaSwagStorageGroup OBJECT-GROUP
+   OBJECTS {
+      aristaSwagStorageType,
+      aristaSwagStorageDescr,
+      aristaSwagStorageAllocUnits,
+      aristaSwagStorageSize,
+      aristaSwagStorageUsed
+   }
+   STATUS      current
+   DESCRIPTION
+         "The collection of objects for SWAG Hr Storage table."
+   ::= { aristaSwagHrGroups 3 }
 
 END

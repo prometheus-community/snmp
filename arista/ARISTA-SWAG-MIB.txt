@@ -7,7 +7,7 @@ IMPORTS
    MODULE-COMPLIANCE, OBJECT-GROUP       FROM SNMPv2-CONF
    MODULE-IDENTITY, OBJECT-TYPE,
    Integer32                             FROM SNMPv2-SMI
-   TEXTUAL-CONVENTION                    FROM SNMPv2-TC
+   TEXTUAL-CONVENTION, TimeStamp         FROM SNMPv2-TC
    InterfaceIndex, InterfaceIndexOrZero  FROM IF-MIB
    aristaMibs                            FROM ARISTA-SMI-MIB;
 
@@ -167,7 +167,7 @@ aristaSwagReachabilityEntry OBJECT-TYPE
           device used to forward traffic to reach the destination device, along with
           the destination's reachability status. 
           The entry's aristaSwagReachabilityBaIfIndex will be greater than 0 if the
-          destination is reachable, and 0 if the destination is unreachable."
+          destination is reachable, otherwise it will be 0."
    INDEX   { aristaSwagReachabilitySrcId, aristaSwagReachabilityDestId }
    ::= { aristaSwagReachabilityTable 1 }
 
@@ -175,7 +175,8 @@ AristaSwagReachabilityEntry ::= SEQUENCE {
    aristaSwagReachabilitySrcId         SwagMemberId,
    aristaSwagReachabilityDestId        SwagMemberId,
    aristaSwagReachabilityBaIfIndex     InterfaceIndexOrZero,
-   aristaSwagReachabilityState         SwagReachabilityState
+   aristaSwagReachabilityState         SwagReachabilityState,
+   aristaSwagReachabilityLastUpdate    TimeStamp
 }
 
 aristaSwagReachabilitySrcId OBJECT-TYPE
@@ -215,6 +216,15 @@ aristaSwagReachabilityState OBJECT-TYPE
          "The reachability status of a destination device."
    ::= { aristaSwagReachabilityEntry 4 }
 
+aristaSwagReachabilityLastUpdate OBJECT-TYPE
+   SYNTAX     TimeStamp
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+         "The sysUpTime value when the reachability status for this entry was last
+          updated."
+   ::= { aristaSwagReachabilityEntry 5 }
+
 -- *********************************************************************************
 -- Conformance Information
 -- *********************************************************************************
@@ -247,7 +257,8 @@ aristaSwagIfGroup OBJECT-GROUP
 aristaSwagReachabilityGroup OBJECT-GROUP
    OBJECTS {
       aristaSwagReachabilityBaIfIndex,
-      aristaSwagReachabilityState
+      aristaSwagReachabilityState,
+      aristaSwagReachabilityLastUpdate
    }
    STATUS      current
    DESCRIPTION

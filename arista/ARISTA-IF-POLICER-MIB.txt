@@ -1,0 +1,347 @@
+-- ARISTA-POLICING-MIB: Arista structure of policing information
+-- Copyright (c) 2025 Arista Networks, Inc.  All rights reserved.
+
+ARISTA-IF-POLICER-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+   MODULE-COMPLIANCE, OBJECT-GROUP         FROM SNMPv2-CONF
+   MODULE-IDENTITY, OBJECT-TYPE,
+   Counter64                               FROM SNMPv2-SMI
+   DisplayString                           FROM SNMPv2-TC
+   InterfaceIndex                          FROM IF-MIB
+   aristaMibs                              FROM ARISTA-SMI-MIB;
+
+aristaIfPolicerMib MODULE-IDENTITY
+    LAST-UPDATED "202506230000Z"
+    ORGANIZATION "Arista Networks, Inc."
+    CONTACT-INFO
+        "Arista Networks, Inc.
+
+         Postal: 5453 Great America Parkway
+                 Santa Clara, CA 95054
+
+         Tel: +1 408 547-5500
+
+         E-mail: snmp@arista.com"
+    DESCRIPTION
+        "The MIB module for reporting interface policing statistics on Arista devices."
+    REVISION  "202506230000Z"
+    DESCRIPTION
+       "The initial revision of this MIB module."
+    ::= { aristaMibs 43 }
+
+-- MIB groups
+aristaIfPolicerMibObjects OBJECT IDENTIFIER ::= { aristaIfPolicerMib 1 }
+aristaIfPolicerMibConformance OBJECT IDENTIFIER ::= { aristaIfPolicerMib 2 }
+
+-- Ingress interface policing statistics 
+aristaIfPolicerInStatsTable OBJECT-TYPE
+   SYNTAX        SEQUENCE OF AristaIfPolicerInStatsTableEntry
+   MAX-ACCESS    not-accessible
+   STATUS        current
+   DESCRIPTION
+      "A table that contains per-interface statistics for policing applied for
+       inbound traffic."
+   ::= { aristaIfPolicerMibObjects 1 }
+
+aristaIfPolicerInStatsTableEntry OBJECT-TYPE
+   SYNTAX        AristaIfPolicerInStatsTableEntry 
+   MAX-ACCESS    not-accessible
+   STATUS        current
+   DESCRIPTION
+      "An entry that contains ingress policing statistics for a given interface.
+       The counters in this table entry are only supported for dedicated policers.
+       If the associated policer for a given entry is a group policer, then the
+       values of the corresponding counters may be zero and should be ignored. If
+       both a dedicated policer and a group policer are applied to a given interface,
+       the traffic on the interface will be subject to both policers, and thus the
+       counter values of the corresponding entry will reflect the combined policing
+       counts. If the associated policing configuration changes, the values of
+       counters will reset to zero."
+   INDEX {
+      aristaIfPolicerInStatsIfIndex
+   }
+   ::= { aristaIfPolicerInStatsTable 1 }
+
+AristaIfPolicerInStatsTableEntry ::= SEQUENCE {
+   -- Index
+   aristaIfPolicerInStatsIfIndex            InterfaceIndex,
+   -- Policing Configuration 
+   aristaIfPolicerInStatsProfile            DisplayString,
+   aristaIfPolicerInStatsGroupPolicer       DisplayString,
+   -- Counters 
+   aristaIfPolicerInStatsPktsDropped        Counter64,
+   aristaIfPolicerInStatsPktsSent           Counter64,
+   aristaIfPolicerInStatsBytesDropped       Counter64,
+   aristaIfPolicerInStatsBytesSent          Counter64,
+   aristaIfPolicerInStatsYellowPktsSent     Counter64,
+   aristaIfPolicerInStatsYellowBytesSent    Counter64
+}
+
+aristaIfPolicerInStatsIfIndex OBJECT-TYPE
+   SYNTAX       InterfaceIndex 
+   MAX-ACCESS   not-accessible
+   STATUS       current
+   DESCRIPTION
+      "The value of the ifIndex object, defined in IF-MIB for the
+       interface associated with the ingress policing statistics."
+   ::= { aristaIfPolicerInStatsTableEntry 1 }
+
+aristaIfPolicerInStatsProfile OBJECT-TYPE
+   SYNTAX       DisplayString(SIZE(0..64)) 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Name of the policer profile associated with this entry. If a
+       dedicated policer is applied to this interface, this is the name
+       of the profile associated with the dedicated policer. If there is
+       no dedicated policer configured, the value of this object will be
+       an empty string. At least one of policer profile or group policer
+       will be associated with this entry."
+   ::= { aristaIfPolicerInStatsTableEntry 2 }
+
+aristaIfPolicerInStatsGroupPolicer OBJECT-TYPE
+   SYNTAX       DisplayString(SIZE(0..64)) 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Name of the group policer associated with this entry. If a policer
+       instance is applied to this interface, this is the name of the group
+       policer. If there is no policer instance configured, the value of this
+       object will be an empty string. At least one of policer profile or
+       group policer will be associated with this entry."
+   ::= { aristaIfPolicerInStatsTableEntry 3 }
+
+aristaIfPolicerInStatsPktsDropped OBJECT-TYPE
+   SYNTAX       Counter64 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Number of packets that exceeded the associated policer's committed
+       information rate."
+   ::= { aristaIfPolicerInStatsTableEntry 4 }
+
+aristaIfPolicerInStatsPktsSent OBJECT-TYPE
+   SYNTAX       Counter64 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Number of packets that conformed with the associated policer's committed
+       information rate."
+   ::= { aristaIfPolicerInStatsTableEntry 5 }
+
+aristaIfPolicerInStatsBytesDropped OBJECT-TYPE
+   SYNTAX       Counter64 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Number of bytes that exceeded the associated policer's committed burst size."
+   ::= { aristaIfPolicerInStatsTableEntry 6 }
+
+aristaIfPolicerInStatsBytesSent OBJECT-TYPE
+   SYNTAX       Counter64 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Number of bytes that conformed with the associated policer's committed burst
+       size."
+   ::= { aristaIfPolicerInStatsTableEntry 7 }
+
+aristaIfPolicerInStatsYellowPktsSent OBJECT-TYPE 
+   SYNTAX       Counter64 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Number of packets that conformed with the associated policer's peak
+       information rate not committed information rate."
+   ::= { aristaIfPolicerInStatsTableEntry 8 }
+
+aristaIfPolicerInStatsYellowBytesSent OBJECT-TYPE
+   SYNTAX       Counter64 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Number of bytes that conformed with the associated policer's peak
+       information rate not committed information rate."
+   ::= { aristaIfPolicerInStatsTableEntry 9 }
+
+-- Egress interface policing statistics 
+aristaIfPolicerOutStatsTable OBJECT-TYPE
+   SYNTAX        SEQUENCE OF AristaIfPolicerOutStatsTableEntry
+   MAX-ACCESS    not-accessible
+   STATUS        current
+   DESCRIPTION
+      "A table that contains per-interface statistics for policing applied for
+       outbound traffic."
+   ::= { aristaIfPolicerMibObjects 2 }
+
+aristaIfPolicerOutStatsTableEntry OBJECT-TYPE
+   SYNTAX        AristaIfPolicerOutStatsTableEntry
+   MAX-ACCESS    not-accessible
+   STATUS        current
+   DESCRIPTION
+      "An entry that contains egress policing statistics for a given interface.
+       The counters in this table entry are only supported for dedicated policers.
+       If the associated policer for a given entry is a group policer, then the
+       values of the corresponding counters may be zero and should be ignored. If
+       both a dedicated policer and a group policer are applied to a given interface,
+       the traffic on the interface will be subject to both policers, and thus the
+       counter values of the corresponding entry will reflect the combined policing
+       counts. If the associated policing configuration changes, the values of
+       counters will reset to zero."
+   INDEX {
+      aristaIfPolicerOutStatsIfIndex
+   }
+   ::= { aristaIfPolicerOutStatsTable 1 }
+
+AristaIfPolicerOutStatsTableEntry ::= SEQUENCE {
+   -- Index
+   aristaIfPolicerOutStatsIfIndex            InterfaceIndex,
+   -- Policing Configuration 
+   aristaIfPolicerOutStatsProfile            DisplayString,
+   aristaIfPolicerOutStatsGroupPolicer       DisplayString,
+   -- Counters 
+   aristaIfPolicerOutStatsPktsDropped        Counter64,
+   aristaIfPolicerOutStatsPktsSent           Counter64,
+   aristaIfPolicerOutStatsBytesDropped       Counter64,
+   aristaIfPolicerOutStatsBytesSent          Counter64,
+   aristaIfPolicerOutStatsYellowPktsSent     Counter64,
+   aristaIfPolicerOutStatsYellowBytesSent    Counter64
+}
+
+aristaIfPolicerOutStatsIfIndex OBJECT-TYPE
+   SYNTAX       InterfaceIndex 
+   MAX-ACCESS   not-accessible
+   STATUS       current
+   DESCRIPTION
+      "The value of the ifIndex object, defined in IF-MIB for the
+       interface associated with the egress policing statistics."
+   ::= { aristaIfPolicerOutStatsTableEntry 1 }
+
+aristaIfPolicerOutStatsProfile OBJECT-TYPE
+   SYNTAX       DisplayString(SIZE(0..64)) 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Name of the policer profile associated with this entry. If a
+       dedicated policer is applied to this interface, this is the name
+       of the profile associated with the dedicated policer. If there is
+       no dedicated policer configured, the value of this object will be
+       an empty string. At least one of policer profile or group policer
+       will be associated with this entry."
+   ::= { aristaIfPolicerOutStatsTableEntry 2 }
+
+aristaIfPolicerOutStatsGroupPolicer OBJECT-TYPE
+   SYNTAX       DisplayString(SIZE(0..64)) 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Name of the group policer associated with this entry. If a policer
+       instance is applied to this interface, this is the name of the group
+       policer. If there is no policer instance configured, the value of this
+       object will be an empty string. At least one of policer profile or 
+       group policer will be associated with this entry."
+   ::= { aristaIfPolicerOutStatsTableEntry 3 }
+
+aristaIfPolicerOutStatsPktsDropped OBJECT-TYPE
+   SYNTAX       Counter64 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Number of packets that exceeded the associated policer's committed
+       information rate."
+   ::= { aristaIfPolicerOutStatsTableEntry 4 }
+
+aristaIfPolicerOutStatsPktsSent OBJECT-TYPE
+   SYNTAX       Counter64 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Number of packets that conformed with the associated policer's committed
+       information rate."
+   ::= { aristaIfPolicerOutStatsTableEntry 5 }
+
+aristaIfPolicerOutStatsBytesDropped OBJECT-TYPE
+   SYNTAX       Counter64 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Number of bytes that exceeded the associated policer's committed burst size.
+       This counter is only supported of dedicated policer."
+   ::= { aristaIfPolicerOutStatsTableEntry 6 }
+
+aristaIfPolicerOutStatsBytesSent OBJECT-TYPE
+   SYNTAX       Counter64 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Number of bytes that conformed with the associated policer's committed burst
+       size. This counter is only supported of dedicated policer."
+   ::= { aristaIfPolicerOutStatsTableEntry 7 }
+
+aristaIfPolicerOutStatsYellowPktsSent OBJECT-TYPE 
+   SYNTAX       Counter64 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Number of packets that conformed with the associated policer's peak
+       information rate not committed information rate."
+   ::= { aristaIfPolicerOutStatsTableEntry 8 }
+
+aristaIfPolicerOutStatsYellowBytesSent OBJECT-TYPE
+   SYNTAX       Counter64 
+   MAX-ACCESS   read-only 
+   STATUS       current
+   DESCRIPTION
+      "Number of bytes that conformed with the associated policer's peak
+       information rate not committed information rate."
+   ::= { aristaIfPolicerOutStatsTableEntry 9 }
+
+-- Conformance
+aristaIfPolicerCompliances OBJECT IDENTIFIER ::= { aristaIfPolicerMibConformance 1 }
+aristaIfPolicerGroups OBJECT IDENTIFIER ::= { aristaIfPolicerMibConformance 2 }
+
+aristaIfPolicerCompliance MODULE-COMPLIANCE
+   STATUS         current
+   DESCRIPTION
+      "The compliance statement for Arista switches that implement
+       the ARISTA-IF-POLICER-MIB."
+   MODULE         -- this module
+   MANDATORY-GROUPS {
+      aristaIfPolicerInStatsGroup,
+      aristaIfPolicerOutStatsGroup
+   }
+   ::= { aristaIfPolicerCompliances 1 }
+
+aristaIfPolicerInStatsGroup OBJECT-GROUP
+   OBJECTS {
+      aristaIfPolicerInStatsProfile,
+      aristaIfPolicerInStatsGroupPolicer,
+      aristaIfPolicerInStatsPktsDropped,
+      aristaIfPolicerInStatsPktsSent,
+      aristaIfPolicerInStatsBytesDropped,
+      aristaIfPolicerInStatsBytesSent, 
+      aristaIfPolicerInStatsYellowPktsSent,
+      aristaIfPolicerInStatsYellowBytesSent
+   }
+   STATUS       current
+   DESCRIPTION
+      "The collection of objects for interface policing ingress statistics."
+   ::= { aristaIfPolicerGroups 1 }
+
+aristaIfPolicerOutStatsGroup OBJECT-GROUP
+   OBJECTS {
+      aristaIfPolicerOutStatsProfile,
+      aristaIfPolicerOutStatsGroupPolicer,
+      aristaIfPolicerOutStatsPktsDropped,
+      aristaIfPolicerOutStatsPktsSent,
+      aristaIfPolicerOutStatsBytesDropped,
+      aristaIfPolicerOutStatsBytesSent, 
+      aristaIfPolicerOutStatsYellowPktsSent,
+      aristaIfPolicerOutStatsYellowBytesSent
+   }
+   STATUS       current
+   DESCRIPTION
+      "The collection of objects for interface policing egress statistics."
+   ::= { aristaIfPolicerGroups 2 }
+END
