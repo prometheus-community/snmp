@@ -15,6 +15,7 @@
 .PHONY: all
 all:
 	@$(MAKE) -f Makefile.apc
+	@$(MAKE) -f Makefile.dell_network
 	@$(MAKE) -f Makefile.eltex
 	@$(MAKE) -f Makefile.fieldserver
 	@$(MAKE) -f Makefile.iana
@@ -26,6 +27,7 @@ all:
 .PHONY: clean
 clean:
 	@$(MAKE) -f Makefile.apc clean
+	@$(MAKE) -f Makefile.dell_network clean
 	@$(MAKE) -f Makefile.eltex clean
 	@$(MAKE) -f Makefile.fieldserver clean
 	@$(MAKE) -f Makefile.iana clean
