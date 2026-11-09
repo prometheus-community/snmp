@@ -23,6 +23,7 @@ all:
 	@$(MAKE) -f Makefile.kemp
 	@$(MAKE) -f Makefile.net-snmp
 	@$(MAKE) -f Makefile.powercom
+	@$(MAKE) -f Makefile.synology
 
 .PHONY: clean
 clean:
@@ -35,3 +36,4 @@ clean:
 	@$(MAKE) -f Makefile.kemp clean
 	@$(MAKE) -f Makefile.net-snmp clean
 	@$(MAKE) -f Makefile.powercom clean
+	@$(MAKE) -f Makefile.synology clean
