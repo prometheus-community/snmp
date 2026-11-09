@@ -1477,6 +1477,30 @@ upsThreePhaseInputVoltageT OBJECT-TYPE
         DESCRIPTION
                 "Input VoltageT"
    ::= { upsThreePhaseInputGrp 4 }
+   
+upsThreePhaseInputCurrentR OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS read-only
+        STATUS mandatory
+        DESCRIPTION
+                "Input CurrentR"
+   ::= { upsThreePhaseInputGrp 5 }
+   
+upsThreePhaseInputCurrentS OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS read-only
+        STATUS mandatory
+        DESCRIPTION
+                "Input CurrentS"
+   ::= { upsThreePhaseInputGrp 6 }
+  
+upsThreePhaseInputCurrentT OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS read-only
+        STATUS mandatory
+        DESCRIPTION
+                "Input CurrentT"
+   ::= { upsThreePhaseInputGrp 7 }
 
 
 upsThreePhaseOutputFrequency OBJECT-TYPE
@@ -1540,6 +1564,30 @@ upsThreePhaseOutputLoadPercentageT OBJECT-TYPE
         DESCRIPTION
                 "Load PercentageT"
    ::= { upsThreePhaseOutputGrp 7 }
+   
+upsThreePhaseOutputCurrentR OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS read-only
+        STATUS mandatory
+        DESCRIPTION
+                "Output CurrentR"
+   ::= { upsThreePhaseOutputGrp 8 }
+   
+upsThreePhaseOutputCurrentS OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS read-only
+        STATUS mandatory
+        DESCRIPTION
+                "Output CurrentS"
+   ::= { upsThreePhaseOutputGrp 9 }
+   
+upsThreePhaseOutputCurrentT OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS read-only
+        STATUS mandatory
+        DESCRIPTION
+                "Output CurrentT"
+   ::= { upsThreePhaseOutputGrp 10 }
 
 
 upsThreePhaseBypassSourceFrequency OBJECT-TYPE
@@ -2642,4 +2690,3 @@ returnFromBatteryFail TRAP-TYPE
  ::= 72
  
 END
-

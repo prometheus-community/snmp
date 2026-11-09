@@ -12,7 +12,7 @@ IMPORTS
     aristaMibs                         FROM ARISTA-SMI-MIB;
 
 aristaXgsMIB MODULE-IDENTITY
-    LAST-UPDATED "202008100000Z"
+    LAST-UPDATED "202607010000Z"
     ORGANIZATION "Arista Networks, Inc."
     CONTACT-INFO
         "Arista Networks, Inc.
@@ -26,6 +26,8 @@ aristaXgsMIB MODULE-IDENTITY
     DESCRIPTION
             "The MIB module for XGS chipset status and configuration
             on Arista devices."
+    REVISION    "202607010000Z"
+    DESCRIPTION "Added aristaXgsIfRxLengthOutOfRangeCounter."
     REVISION    "202008100000Z"
     DESCRIPTION "Added aristaXgsCpuQueueStatsTable"
     REVISION    "201909270000Z"
@@ -175,7 +177,8 @@ AristaXgsIfEntry ::= SEQUENCE {
     aristaXgsIfWredEctDropPktCounter        Counter64,
     aristaXgsIfWredNonEctDropPktCounter     Counter64,
     aristaXgsIfTxSplitHorizonDrop           Counter64,
-    aristaXgsIfWredDropPktCounter           Counter64
+    aristaXgsIfWredDropPktCounter           Counter64,
+    aristaXgsIfRxLengthOutOfRangeCounter    Counter64
 }
 
 aristaXgsIfTxIpV4L3UcOk OBJECT-TYPE
@@ -803,6 +806,23 @@ aristaXgsIfWredDropPktCounter OBJECT-TYPE
         ifCounterDiscontinuityTime."
     ::= { aristaXgsIfEntry 42 }
 
+aristaXgsIfRxLengthOutOfRangeCounter OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of packets in which the 802.3 length field did
+        not match the number of data bytes actually received.
+
+        This statistic is not supported by all platforms. It is
+        set to 0 for unsupported platforms.
+
+        Discontinuities in the value of this counter can occur at
+        re-initialization of the management system, and at other
+        times as indicated by the value of
+        ifCounterDiscontinuityTime."
+    ::= { aristaXgsIfEntry 43 }
+
 -- Nexthop objects --
 
 aristaXgsNexthopEcmpUnderlayMaxEntries OBJECT-TYPE
@@ -1088,7 +1108,8 @@ aristaXgsMibGroup   OBJECT-GROUP
         aristaXgsIfEcnMarkedPackets,
         aristaXgsIfWredEctDropPktCounter,
         aristaXgsIfWredNonEctDropPktCounter,
-        aristaXgsIfTxSplitHorizonDrop
+        aristaXgsIfTxSplitHorizonDrop,
+        aristaXgsIfRxLengthOutOfRangeCounter
     }
     STATUS      deprecated
     DESCRIPTION
@@ -1171,7 +1192,8 @@ aristaXgsIfGroup   OBJECT-GROUP
         aristaXgsIfWredEctDropPktCounter,
         aristaXgsIfWredNonEctDropPktCounter,
         aristaXgsIfTxSplitHorizonDrop,
-        aristaXgsIfWredDropPktCounter
+        aristaXgsIfWredDropPktCounter,
+        aristaXgsIfRxLengthOutOfRangeCounter
     }
     STATUS      current
     DESCRIPTION

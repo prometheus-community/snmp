@@ -15,6 +15,7 @@
 .PHONY: all
 all:
 	@$(MAKE) -f Makefile.apc
+	@$(MAKE) -f Makefile.arista
 	@$(MAKE) -f Makefile.dell_network
 	@$(MAKE) -f Makefile.eltex
 	@$(MAKE) -f Makefile.fieldserver
@@ -22,11 +23,11 @@ all:
 	@$(MAKE) -f Makefile.kemp
 	@$(MAKE) -f Makefile.net-snmp
 	@$(MAKE) -f Makefile.powercom
-	@$(MAKE) -f Makefile.arista
 
 .PHONY: clean
 clean:
 	@$(MAKE) -f Makefile.apc clean
+	@$(MAKE) -f Makefile.arista clean
 	@$(MAKE) -f Makefile.dell_network clean
 	@$(MAKE) -f Makefile.eltex clean
 	@$(MAKE) -f Makefile.fieldserver clean
@@ -34,4 +35,3 @@ clean:
 	@$(MAKE) -f Makefile.kemp clean
 	@$(MAKE) -f Makefile.net-snmp clean
 	@$(MAKE) -f Makefile.powercom clean
-	@$(MAKE) -f Makefile.arista clean

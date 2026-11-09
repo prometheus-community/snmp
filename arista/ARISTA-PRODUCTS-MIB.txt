@@ -12,7 +12,7 @@ IMPORTS
         FROM ARISTA-SMI-MIB;
 
 aristaProductsMIB MODULE-IDENTITY
-    LAST-UPDATED    "202603030000Z"
+    LAST-UPDATED    "202608030000Z"
     ORGANIZATION "Arista Networks, Inc."
     CONTACT-INFO
         "Arista Networks, Inc.
@@ -26,6 +26,42 @@ aristaProductsMIB MODULE-IDENTITY
     DESCRIPTION
         "This module defines the object identifiers returned as values for
          sysObjectID or entPhysicalVendorType for Arista Networks hardware."
+        REVISION      "202608030000Z"
+        DESCRIPTION
+                "Revised to include DCS-7060XE7-64PRS"
+        REVISION      "202608020000Z"
+        DESCRIPTION
+                "Revised to include DCS-7060XE7-64PS-B-ALD"
+        REVISION      "202608010000Z"
+        DESCRIPTION
+                "Revised to include DCS-7060XE7-64PRS-BB"
+        REVISION      "202607310000Z"
+        DESCRIPTION
+                "Revised to include DCS-7060XE7-64PS"
+        REVISION      "202607230000Z"
+        DESCRIPTION
+                "Revised to include DCS-7020R4-24Y-6QDF and DCS-7020R4M-24Y-6QDF"
+        REVISION      "202607020000Z"
+        DESCRIPTION
+                "Revised to include DCS-7010TX-48C-S"
+        REVISION      "202607010001Z"
+        DESCRIPTION
+                "Revised to include DCS-7280SR3-48YC8-S"
+        REVISION      "202607010000Z"
+        DESCRIPTION
+                "Revised to include DCS-7280CR3-32P4-S"
+        REVISION      "202605110002Z"
+        DESCRIPTION
+                "Revised to include DCS-7020R4-24Y-4QC and DCS-7020R4M-24Y-4QC"
+        REVISION      "202605110000Z"
+        DESCRIPTION
+                "Revised to include CCS-710XP-28TNH-2S, CCS-710XP-28TNH-2S-2"
+        REVISION      "202604290000Z"
+        DESCRIPTION
+                "Revised to include DCS-7280R4-64QC-10PE and DCS-7280R4K-64QC-10PE"
+        REVISION      "202604160000Z"
+        DESCRIPTION
+                "Revised to include CCS-720DF-48Y-HVDC and CCS-720DF-48Y-HVDC-2"
         REVISION      "202603030000Z"
         DESCRIPTION
                 "Revised to include DCS-7020R4-48TX-4QC and DCS-7020R4M-48TX-4QC"
@@ -68,9 +104,6 @@ aristaProductsMIB MODULE-IDENTITY
         REVISION      "202506240005Z"
         DESCRIPTION
                 "Revised to include DCS-7280R4-32DE, and DCS-7280R4K-32DE"
-        REVISION      "202506240003Z"
-        DESCRIPTION
-                "Revised to include DCS-7280R4-64QC-10PE, DCS-7280R4M-64QC-10PE, and DCS-7280R4K-64QC-10PE"
         REVISION      "202506100000Z"
         DESCRIPTION
                 "Revised to include CloudEOS"
@@ -1647,12 +1680,6 @@ aristaDCS7060X632PE OBJECT IDENTIFIER ::= { aristaProducts 3011 7060 2983 6 32 3
 aristaDCS7060X632PEN OBJECT IDENTIFIER ::= { aristaProducts 3011 7060 2983 6 32 3255 1359 }
 -- CloudEOS EOS in a virtual machine
 aristaCloudEOS OBJECT IDENTIFIER ::= { aristaProducts 3806 }
--- DCS-7280R4-64QC-10PE 64x100GbE (QSFP) & 10x800GbE (OSFP) Ethernet Switch
-aristaDCS7280R464QC10PE OBJECT IDENTIFIER ::= { aristaProducts 3011 7280 2899 4 64 3086 10 3255 }
--- DCS-7280R4M-64QC-10PE 64x100GbE (QSFP) & 10x800GbE (OSFP) Ethernet Switch with MACsec
-aristaDCS7280R4M64QC10PE OBJECT IDENTIFIER ::= { aristaProducts 3011 7280 2899 4 972 64 3086 10 3255 }
--- DCS-7280R4K-64QC-10PE 64x100GbE (QSFP) & 10x800GbE (OSFP) Ethernet Switch with MACsec and large routes
-aristaDCS7280R4K64QC10PE OBJECT IDENTIFIER ::= { aristaProducts 3011 7280 2899 4 202 64 3086 10 3255 }
 -- DCS-7280R4-32DE 32x800GbE (QSFP-DD) Ethernet Switch
 aristaDCS7280R432DE OBJECT IDENTIFIER ::= { aristaProducts 3011 7280 2899 4 32 2955 }
 -- DCS-7280R4K-32DE 32x800GbE (QSFP-DD) Ethernet Switch with MACsec and large routes
@@ -1691,6 +1718,40 @@ aristaCCS710HXP20TNH4S OBJECT IDENTIFIER ::= { aristaProducts 2546 710 3117 20 2
 aristaDCS7020R448TX4QC OBJECT IDENTIFIER ::= { aristaProducts 3011 7020 2899 4 48 1958 4 3086 }
 -- DCS-7020R4M-48TX-4QC 48x10GBASE-T (RJ45) & 4x100GbE (QSFP100) Ethernet Switch with MACsec
 aristaDCS7020R4M48TX4QC OBJECT IDENTIFIER ::= { aristaProducts 3011 7020 2899 4 972 48 1958 4 3086 }
+-- CCS-720DF-48Y-HVDC 48-port SFP & 4-port SFP28 Ethernet Switch with HV DC Power Supply
+aristaCCS720DF48YHVDC OBJECT IDENTIFIER ::= { aristaProducts 2546 720 2952 48 2600 397 }
+-- CCS-720DF-48Y-HVDC-2 48-port SFP & 4-port SFP28 Ethernet Switch with HV DC Power Supply
+aristaCCS720DF48YHVDC2 OBJECT IDENTIFIER ::= { aristaProducts 2546 720 2952 48 2600 397 2 }
+-- DCS-7280R4-64QC-10PE 64x100GbE (QSFP) & 10x800GbE (OSFP) Ethernet Switch
+aristaDCS7280R464QC10PE OBJECT IDENTIFIER ::= { aristaProducts 3011 7280 2899 4 64 3086 10 3255 }
+-- DCS-7280R4K-64QC-10PE 64x100GbE (QSFP) & 10x800GbE (OSFP) Ethernet Switch with MACsec and large routes
+aristaDCS7280R4K64QC10PE OBJECT IDENTIFIER ::= { aristaProducts 3011 7280 2899 4 202 64 3086 10 3255 }
+-- CCS-710XP-28TNH-2S 24x 1G Base-T 30W PoE + 4x 5G Base-T 90W PoE + 2x SFP+ Ethernet Switch
+aristaCCS710XP28TNH2S OBJECT IDENTIFIER ::= { aristaProducts 2546 710 858 28 2083 2 3282 }
+-- CCS-710XP-28TNH-2S-2 24x 1G Base-T 30W PoE + 4x 5G Base-T 90W PoE + 2x SFP+ Ethernet Switch
+aristaCCS710XP28TNH2S2 OBJECT IDENTIFIER ::= { aristaProducts 2546 710 858 28 2083 2 3282 2 }
+-- DCS-7020R4-24Y-4QC Compact edge router with 24xSFP25, 4xQSFP100
+aristaDCS7020R424Y4QC OBJECT IDENTIFIER ::= { aristaProducts 3011 7020 2899 4 24 2600 4 3086 }
+-- DCS-7020R4M-24Y-4QC Compact edge router with 24xSFP25, 4xQSFP100, and MACsec
+aristaDCS7020R4M24Y4QC OBJECT IDENTIFIER ::= { aristaProducts 3011 7020 2899 4 972 24 2600 4 3086 }
+-- DCS-7280CR3-32P4-S 32x100GbE (QSFP100) & 4x400GbE (OSFP) Ethernet Switch with secure boot
+aristaDCS7280CR332P4S OBJECT IDENTIFIER ::= { aristaProducts 3011 7280 2727 3 32 2129 4 3282 }
+-- DCS-7280SR3-48YC8-S 48x25GbE (SFP) & 8x100GbE (QSFP) Ethernet Switch with secure boot
+aristaDCS7280SR348YC8S OBJECT IDENTIFIER ::= { aristaProducts 3011 7280 3735 3 48 1654 8 3282 }
+-- DCS-7010TX-48C-S 48-port 1000BASE-T + 4-port SFP28 Switch with secure boot
+aristaDCS7010TX48CS OBJECT IDENTIFIER ::= { aristaProducts 3011 7010 1958 48 2878 3282 }
+-- DCS-7020R4-24Y-6QDF Compact edge router with 24xSFP28 (25G), 2xQSFP112 (400G), 2xQSFP28 (100G), and 2xQSFP-DD (400G)
+aristaDCS7020R424Y6QDF OBJECT IDENTIFIER ::= { aristaProducts 3011 7020 2899 4 24 2600 6 2080 }
+-- DCS-7020R4M-24Y-6QDF Compact edge router with 24xSFP28 (25G), 2xQSFP112 (400G), 2xQSFP28 (100G), 2xQSFP-DD (400G), and MACsec
+aristaDCS7020R4M24Y6QDF OBJECT IDENTIFIER ::= { aristaProducts 3011 7020 2899 4 972 24 2600 6 2080 }
+-- DCS-7060XE7-64PS 64x1600GbE OSFP & 1xQSFP Ethernet Switch
+aristaDCS7060XE764PS OBJECT IDENTIFIER ::= { aristaProducts 3011 7060 847 7 64 3233 }
+-- DCS-7060XE7-64PRS-BB 64x1600GbE OSFP-RHS & 1xQSFP Ethernet Switch
+aristaDCS7060XE764PRSBB OBJECT IDENTIFIER ::= { aristaProducts 3011 7060 847 7 64 3530 3590 }
+-- DCS-7060XE7-64PS-B-ALD 64x1600GbE OSFP & 1xQSFP Ethernet Switch
+aristaDCS7060XE764PSBALD OBJECT IDENTIFIER ::= { aristaProducts 3011 7060 847 7 64 3233 3261 2410 }
+-- DCS-7060XE7-64PRS 64x1600GbE OSFP-RHS & 1xQSFP Ethernet Switch
+aristaDCS7060XE764PRS OBJECT IDENTIFIER ::= { aristaProducts 3011 7060 847 7 64 3530 }
 
 END
 
