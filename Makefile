@@ -21,6 +21,7 @@ all:
 	@$(MAKE) -f Makefile.fieldserver
 	@$(MAKE) -f Makefile.iana
 	@$(MAKE) -f Makefile.ieee
+	@$(MAKE) -f Makefile.ietf
 	@$(MAKE) -f Makefile.kemp
 	@$(MAKE) -f Makefile.net-snmp
 	@$(MAKE) -f Makefile.powercom
@@ -35,6 +36,7 @@ clean:
 	@$(MAKE) -f Makefile.fieldserver clean
 	@$(MAKE) -f Makefile.iana clean
 	@$(MAKE) -f Makefile.ieee clean
+	@$(MAKE) -f Makefile.ietf
 	@$(MAKE) -f Makefile.kemp clean
 	@$(MAKE) -f Makefile.net-snmp clean
 	@$(MAKE) -f Makefile.powercom clean
