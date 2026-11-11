@@ -1,0 +1,588 @@
+TIMETRA-GLOBAL-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-COMPLIANCE, OBJECT-GROUP
+                                                         FROM SNMPv2-CONF
+    MODULE-IDENTITY, OBJECT-TYPE,
+    enterprises
+                                                         FROM SNMPv2-SMI
+    DateAndTime
+                                                         FROM SNMPv2-TC
+    ;
+
+timetraGlobalMIBModule           MODULE-IDENTITY
+    LAST-UPDATED "201701010000Z"
+    ORGANIZATION "Nokia"
+    CONTACT-INFO
+        "Nokia SROS Support
+         Web: http://www.nokia.com"
+    DESCRIPTION
+        "This  document  is the SNMP MIB module for central registration
+         of object identifiers defined under the Nokia 'timetra' branch
+         for the Nokia SROS series SNMP MIBs.
+
+         Copyright 2003-2018 Nokia. All rights reserved. Reproduction of this
+         document is authorized on the condition that the foregoing copyright
+         notice is included.
+
+         This SNMP MIB module (Specification) embodies Nokia's
+         proprietary intellectual property.  Nokia retains
+         all title and ownership in the Specification, including any
+         revisions.
+
+         Nokia grants all interested parties a non-exclusive license to use and
+         distribute an unmodified copy of this Specification in connection with
+         management of Nokia products, and without fee, provided this copyright
+         notice and license appear on all copies.
+
+         This Specification is supplied 'as is', and Nokia makes no warranty,
+         either express or implied, as to the use, operation, condition, or
+         performance of the Specification."
+
+    REVISION    "201701010000Z"
+    DESCRIPTION
+        "Rev 15.0                1 Jan 2017 00:00
+         15.0 release of the TIMETRA-GLOBAL-MIB."
+
+    REVISION    "201601010000Z"
+    DESCRIPTION
+        "Rev 14.0                1 Jan 2016 00:00
+         14.0 release of the TIMETRA-GLOBAL-MIB."
+
+    REVISION    "201501010000Z"
+    DESCRIPTION
+        "Rev 13.0                1 Jan 2015 00:00
+         13.0 release of the TIMETRA-GLOBAL-MIB."
+
+    REVISION    "201401010000Z"
+    DESCRIPTION
+        "Rev 12.0                1 Jan 2014 00:00
+         12.0 release of the TIMETRA-GLOBAL-MIB."
+
+    REVISION    "201208010000Z"
+    DESCRIPTION
+        "Rev 11.0                1 Aug 2012 00:00
+         11.0 release of the TIMETRA-GLOBAL-MIB."
+
+    REVISION    "201102010000Z"
+    DESCRIPTION
+        "Rev 9.0                1 Feb 2011 00:00
+         9.0 release of the TIMETRA-GLOBAL-MIB."
+
+    REVISION    "201002280000Z"
+    DESCRIPTION
+        "Rev 8.0                28 Feb 2010 00:00
+         8.0 release of the TIMETRA-GLOBAL-MIB."
+
+    REVISION    "200902280000Z"
+    DESCRIPTION
+        "Rev 7.0                28 Feb 2009 00:00
+         7.0 release of the TIMETRA-GLOBAL-MIB."
+
+    REVISION    "200902010000Z"
+    DESCRIPTION
+        "Rev 7.0                01 Feb 2009 00:00
+         7.0 release of the TIMETRA-GLOBAL-MIB."
+
+    REVISION    "200807010000Z"
+    DESCRIPTION
+        "Rev 6.1                01 Jul 2008 00:00
+         6.1 release of the TIMETRA-GLOBAL-MIB."
+
+    REVISION    "200801010000Z"
+    DESCRIPTION
+        "Rev 6.0                01 Jan 2008 00:00
+         6.0 release of the TIMETRA-GLOBAL-MIB."
+
+    REVISION    "200701010000Z"
+    DESCRIPTION
+        "Rev 5.0                01 Jan 2007 00:00
+         5.0 release of the TIMETRA-GLOBAL-MIB."
+
+    REVISION    "200508310000Z"
+    DESCRIPTION
+        "Rev 3.0                31 Aug 2005 00:00
+         3.0 release of the TIMETRA-GLOBAL-MIB."
+
+    REVISION    "200501240000Z"
+    DESCRIPTION
+        "Rev 2.1                24 Jan 2005 00:00
+         2.1 release of the TIMETRA-GLOBAL-MIB."
+
+    REVISION    "200401150000Z"
+    DESCRIPTION
+        "Rev 2.0                15 Jan 2004 00:00
+         2.0 release of the TIMETRA-GLOBAL-MIB."
+
+    REVISION    "200301200000Z"
+    DESCRIPTION
+        "Rev 1.0                20 Jan 2003 00:00
+         This is the 1.0 release of the TIMETRA-GLOBAL-MIB."
+
+    REVISION    "200008140000Z"
+    DESCRIPTION
+        "Rev 0.1                14 Aug 2000 00:00
+         This is the initial version of the TIMETRA-GLOBAL-MIB."
+
+    ::= { timetraModules 1 }
+
+timetra                          OBJECT IDENTIFIER ::= { enterprises 6527 }
+
+timetraReg                       OBJECT IDENTIFIER ::= { timetra 1 }
+
+timetraModules                   OBJECT IDENTIFIER ::= { timetraReg 1 }
+
+timetraSRMIBModules              OBJECT IDENTIFIER ::= { timetraModules 3 }
+
+timetraAirframeMIBModule         OBJECT IDENTIFIER ::= { timetraSRMIBModules 111 }
+
+timetraApplianceMIBModule        OBJECT IDENTIFIER ::= { timetraSRMIBModules 128 }
+
+timetraCapabilityModule          OBJECT IDENTIFIER ::= { timetraModules 4 }
+
+timetra7750CapModule             OBJECT IDENTIFIER ::= { timetraCapabilityModule 1 }
+
+timetra7450CapModule             OBJECT IDENTIFIER ::= { timetraCapabilityModule 2 }
+
+timetra7710CapModule             OBJECT IDENTIFIER ::= { timetraCapabilityModule 3 }
+
+timetra7750MGCapModule           OBJECT IDENTIFIER ::= { timetraCapabilityModule 4 }
+
+timetraSROSCapModule             OBJECT IDENTIFIER ::= { timetraCapabilityModule 5 }
+
+timetraDCCapModule               OBJECT IDENTIFIER ::= { timetraCapabilityModule 6 }
+
+timetraMGCapModule               OBJECT IDENTIFIER ::= { timetraCapabilityModule 7 }
+
+timetraAGCapModule               OBJECT IDENTIFIER ::= { timetraCapabilityModule 8 }
+
+alcatelCommonMIBModules          OBJECT IDENTIFIER ::= { timetraModules 5 }
+
+nokiaLRouters                    OBJECT IDENTIFIER ::= { timetraReg 20 }
+
+tmnxModelIXRsLReg               OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7250 IXR-s device."
+    ::= { nokiaLRouters 1 }
+
+tmnxModelIXR6LReg               OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7250 IXR-6 device."
+    ::= { nokiaLRouters 6 }
+
+tmnxModelIXR6eLReg               OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7250 IXR-6e device."
+    ::= { nokiaLRouters 7 }
+
+tmnxModelIXR10LReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7250 IXR-10 device."
+    ::= { nokiaLRouters 10 }
+
+tmnxModelIXR10eLReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7250 IXR-10e device."
+    ::= { nokiaLRouters 11 }
+
+tmnxModelIXR18eLReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7250 IXR-18e device."
+    ::= { nokiaLRouters 12 }
+
+tmnxModelIXRD1LReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7220 IXR-D1 device."
+    ::= { nokiaLRouters 21 }
+
+tmnxModelIXRD2LReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7220 IXR-D2 device."
+    ::= { nokiaLRouters 22 }
+
+tmnxModelIXRD3LReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7220 IXR-D3 device."
+    ::= { nokiaLRouters 23 }
+
+tmnxModelIXRD4LReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7220 IXR-D4 device."
+    ::= { nokiaLRouters 24 }
+
+tmnxModelIXRD5LReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7220 IXR-D5 device."
+    ::= { nokiaLRouters 25 }
+
+tmnxModelIXRD2LLReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7220 IXR-D2L device."
+    ::= { nokiaLRouters 26 }
+
+tmnxModelIXRD3LLReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7220 IXR-D3L device."
+    ::= { nokiaLRouters 27 }
+
+tmnxModelIXRH2LReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7220 IXR-H2 device."
+    ::= { nokiaLRouters 52 }
+
+tmnxModelIXRH3LReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7220 IXR-H3 device."
+    ::= { nokiaLRouters 53 }
+
+tmnxModelIXRH4LReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7220 IXR-H4 device."
+    ::= { nokiaLRouters 54 }
+
+tmnxModelIXRH432DLReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7220 IXR-H4-32D device."
+    ::= { nokiaLRouters 55 }
+
+tmnxModelIXRH532DLReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7220 IXR-H5-32D device."
+    ::= { nokiaLRouters 56 }
+
+tmnxModelIXRH564DLReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7220 IXR-H5-64D device."
+    ::= { nokiaLRouters 57 }
+
+tmnxModelIXRH564OLReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7220 IXR-H5-64O device."
+    ::= { nokiaLRouters 58 }
+
+tmnxModelIXRH664LReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7220 IXR-H6-64 device."
+    ::= { nokiaLRouters 59 }
+
+tmnxModelIXRH564O512LReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7220 IXR-H5-64O-512 device."
+    ::= { nokiaLRouters 61 }
+
+
+tmnxModelIXRX1bLReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7250 IXR-X1b device."
+    ::= { nokiaLRouters 70 }
+
+tmnxModelIXRX3bLReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7250 IXR-X3b device."
+    ::= { nokiaLRouters 71 }
+
+tmnxModelIXRX4LReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7250 IXR-X4 device."
+    ::= { nokiaLRouters 72 }
+
+tmnxModelIXRX4OSFPLReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7250 IXR-X4-OSFP device."
+    ::= { nokiaLRouters 73 }
+
+tmnxModelIXSA1LReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7215 IXS-A1 device."
+    ::= { nokiaLRouters 90 }
+
+tmnxModelIXSA1SReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7215 IXS-A1 device (SONiC)."
+    ::= { nokiaLRouters 91 }
+
+tmnxModelIXRX1bSReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7250 IXR-X1b device (SONiC)."
+    ::= { nokiaLRouters 92 }
+
+tmnxModelIXRX3bSReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7250 IXR-X3b device (SONiC)."
+    ::= { nokiaLRouters 93 }
+
+tmnxModelIXRH4SReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7220 IXR-H4 device (SONiC."
+    ::= { nokiaLRouters 94 }
+
+tmnxModelIXRD4SReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7220 IXR-D4 device (SONiC)."
+    ::= { nokiaLRouters 95 }
+
+tmnxModelSXR132DLReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7730 SXR-1-32D device."
+    ::= { nokiaLRouters 100 }
+
+tmnxModelSXR1d32DLReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7730 SXR-1d-32D device."
+    ::= { nokiaLRouters 101 }
+
+tmnxModelSXR1d60SLReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7730 SXR-1d-60S device."
+    ::= { nokiaLRouters 102 }
+
+tmnxModelSXR1x44SLReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7730 SXR-1x-44S device."
+    ::= { nokiaLRouters 103 }
+
+tmnxModelSXRR6dLReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7730 SXR-R6d device."
+    ::= { nokiaLRouters 110 }
+
+tmnxModelSXRR6dlLReg              OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         Nokia 7730 SXR-R6dl device."
+    ::= { nokiaLRouters 111 }
+
+tmnxModelSseT8164LReg           OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION
+        "This objectId is to be used as the mib-2 sysObjectID to identify the
+         SuperMicro SSE-T81-64 device."
+    ::= { nokiaLRouters 200 }
+
+timetraGeneric                   OBJECT IDENTIFIER ::= { timetra 2 }
+
+timetraProducts                  OBJECT IDENTIFIER ::= { timetra 3 }
+
+tmnxSRMIB                        OBJECT IDENTIFIER ::= { timetraProducts 1 }
+
+tmnxSRConfs                      OBJECT IDENTIFIER ::= { tmnxSRMIB 1 }
+
+tmnxSRObjs                       OBJECT IDENTIFIER ::= { tmnxSRMIB 2 }
+
+tmnxSRNotifyPrefix               OBJECT IDENTIFIER ::= { tmnxSRMIB 3 }
+
+tmnxESSMIB                       OBJECT IDENTIFIER ::= { timetraProducts 2 }
+
+tmnxESSConfs                     OBJECT IDENTIFIER ::= { tmnxESSMIB 1 }
+
+tmnxESSObjs                      OBJECT IDENTIFIER ::= { tmnxESSMIB 2 }
+
+tmnxESSNotifyPrefix              OBJECT IDENTIFIER ::= { tmnxESSMIB 3 }
+
+alcatelCommonMIB                 OBJECT IDENTIFIER ::= { timetraProducts 3 }
+
+alcatelConformance               OBJECT IDENTIFIER ::= { alcatelCommonMIB 1 }
+
+alcatelObjects                   OBJECT IDENTIFIER ::= { alcatelCommonMIB 2 }
+
+alcatelNotifyPrefix              OBJECT IDENTIFIER ::= { alcatelCommonMIB 3 }
+
+tmnxMGMIB                        OBJECT IDENTIFIER ::= { timetraProducts 4 }
+
+tmnxMGConfs                      OBJECT IDENTIFIER ::= { tmnxMGMIB 1 }
+
+tmnxMGObjs                       OBJECT IDENTIFIER ::= { tmnxMGMIB 2 }
+
+tmnxMGNotifyPrefix               OBJECT IDENTIFIER ::= { tmnxMGMIB 3 }
+
+tmnxAgentCapability              OBJECT IDENTIFIER ::= { timetra 4 }
+
+tmnx7750AgentCapability          OBJECT IDENTIFIER ::= { tmnxAgentCapability 1 }
+
+tmnx7450AgentCapability          OBJECT IDENTIFIER ::= { tmnxAgentCapability 2 }
+
+tmnx7710AgentCapability          OBJECT IDENTIFIER ::= { tmnxAgentCapability 3 }
+
+tmnxProductCapability            OBJECT IDENTIFIER ::= { timetra 5 }
+
+tmnx7750Capability               OBJECT IDENTIFIER ::= { tmnxProductCapability 1 }
+
+tmnx7750V3v0                     OBJECT IDENTIFIER ::= { tmnx7750Capability 1 }
+
+tmnx7750V4v0                     OBJECT IDENTIFIER ::= { tmnx7750Capability 2 }
+
+tmnx7750V5v0                     OBJECT IDENTIFIER ::= { tmnx7750Capability 3 }
+
+tmnx7750V6v0                     OBJECT IDENTIFIER ::= { tmnx7750Capability 4 }
+
+tmnx7750V6v1                     OBJECT IDENTIFIER ::= { tmnx7750Capability 5 }
+
+tmnx7750V7v0                     OBJECT IDENTIFIER ::= { tmnx7750Capability 6 }
+
+tmnx7750V8v0                     OBJECT IDENTIFIER ::= { tmnx7750Capability 7 }
+
+tmnx7450Capability               OBJECT IDENTIFIER ::= { tmnxProductCapability 2 }
+
+tmnx7450V3v0                     OBJECT IDENTIFIER ::= { tmnx7450Capability 1 }
+
+tmnx7450V4v0                     OBJECT IDENTIFIER ::= { tmnx7450Capability 2 }
+
+tmnx7450V5v0                     OBJECT IDENTIFIER ::= { tmnx7450Capability 3 }
+
+tmnx7450V6v0                     OBJECT IDENTIFIER ::= { tmnx7450Capability 4 }
+
+tmnx7450V6v1                     OBJECT IDENTIFIER ::= { tmnx7450Capability 5 }
+
+tmnx7450V7v0                     OBJECT IDENTIFIER ::= { tmnx7450Capability 6 }
+
+tmnx7450V8v0                     OBJECT IDENTIFIER ::= { tmnx7450Capability 7 }
+
+tmnx7710Capability               OBJECT IDENTIFIER ::= { tmnxProductCapability 3 }
+
+tmnx7710V3v0                     OBJECT IDENTIFIER ::= { tmnx7710Capability 1 }
+
+tmnx7710V4v0                     OBJECT IDENTIFIER ::= { tmnx7710Capability 2 }
+
+tmnx7710V5v0                     OBJECT IDENTIFIER ::= { tmnx7710Capability 3 }
+
+tmnx7710V6v0                     OBJECT IDENTIFIER ::= { tmnx7710Capability 4 }
+
+tmnx7710V6v1                     OBJECT IDENTIFIER ::= { tmnx7710Capability 5 }
+
+tmnx7710V7v0                     OBJECT IDENTIFIER ::= { tmnx7710Capability 6 }
+
+tmnx7710V8v0                     OBJECT IDENTIFIER ::= { tmnx7710Capability 7 }
+
+tmnx7750MGCapability             OBJECT IDENTIFIER ::= { tmnxProductCapability 4 }
+
+tmnx7750MGV1v0                   OBJECT IDENTIFIER ::= { tmnx7750MGCapability 1 }
+
+tmnx7750MGV2v0                   OBJECT IDENTIFIER ::= { tmnx7750MGCapability 2 }
+
+tmnx7750MGV3v0                   OBJECT IDENTIFIER ::= { tmnx7750MGCapability 3 }
+
+tmnx7750MGV4v0                   OBJECT IDENTIFIER ::= { tmnx7750MGCapability 4 }
+
+tmnxSROSCapability               OBJECT IDENTIFIER ::= { tmnxProductCapability 5 }
+
+tmnxSROSV8v0                     OBJECT IDENTIFIER ::= { tmnxSROSCapability 1 }
+
+tmnxSROSV9v0                     OBJECT IDENTIFIER ::= { tmnxSROSCapability 2 }
+
+tmnxSROSV10v0                    OBJECT IDENTIFIER ::= { tmnxSROSCapability 3 }
+
+tmnxBasedProducts                OBJECT IDENTIFIER ::= { timetra 6 }
+
+timetraConformance               OBJECT IDENTIFIER ::= { timetra 999 }
+
+timetraCompliances               OBJECT IDENTIFIER ::= { timetraConformance 1 }
+
+timetraCompliance                MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION
+        "The global MIB compliance statement for timetra products"
+    MODULE
+        MANDATORY-GROUPS {
+            timetraGroup
+        }
+    ::= { timetraCompliances 1 }
+
+timetraGroups                    OBJECT IDENTIFIER ::= { timetraConformance 2 }
+
+timetraGroup                     OBJECT-GROUP
+    OBJECTS     {
+        timetraEoM
+    }
+    STATUS      current
+    DESCRIPTION
+        "The group of objects in the timetra group"
+    ::= { timetraGroups 1 }
+
+timetraEoM                       OBJECT-TYPE
+    SYNTAX      DateAndTime
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The object timetraEoM is the last readable object supported by Nokia
+         SR family defined by Nokia.
+
+         The value of timetraEoM indicates the date and time when the object
+         was last read in an SNMP get request."
+    ::= { timetra 1000 }
+
+END

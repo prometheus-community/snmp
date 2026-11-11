@@ -1,0 +1,38 @@
+# Copyright The Prometheus Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+include Makefile.curl
+
+# Nokia MIBs are shipped with the device and not publicly availalbe in their
+# support portal. To work around this, we pull the rootfs of the
+# ghcr.io/nokia/srlinux:26.7.2 image and extract the shipped mibs
+NOKIA_SRLINUX_LAYER_URL := https://ghcr.io/v2/nokia/srlinux/blobs/sha256:db0aae98c45252d77a8fea14f872a2a14ed57f309457ca5407cafe0f0bb59ef3
+
+all: nokia/.done
+
+nokia/.done:
+	@echo ">> Downloading Nokia Mibs"
+	@echo ">> Authenticating against ghcr"
+	$(eval TOKEN := $(shell curl $(CURL_OPTS) 'https://ghcr.io/token?scope=repository:nokia/srlinux:pull' | cut -d'"' -f 4))
+	@echo ">> Downloading layer"
+	@curl $(CURL_OPTS) -o nokia_srlinux.tar.gz "$(NOKIA_SRLINUX_LAYER_URL)" -H "Authorization: Bearer $(TOKEN)"
+	tar -zxvf nokia_srlinux.tar.gz --strip-components 4 './opt/srlinux/snmp/MIBs.zip'
+	@unzip -d nokia -o -j MIBs.zip
+	@rm -f MIBs.zip nokia_srlinux.tar.gz
+	@find nokia/ -type f ! -name 'TIMETRA*' -delete
+	@touch nokia/.done
+
+
+.PHONY: clean
+clean:
+	rm -rvf nokia/.done
