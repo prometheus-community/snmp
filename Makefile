@@ -24,6 +24,7 @@ all:
 	@$(MAKE) -f Makefile.ietf
 	@$(MAKE) -f Makefile.kemp
 	@$(MAKE) -f Makefile.net-snmp
+	@$(MAKE) -f Makefile.nokia
 	@$(MAKE) -f Makefile.powercom
 	@$(MAKE) -f Makefile.synology
 
@@ -39,5 +40,6 @@ clean:
 	@$(MAKE) -f Makefile.ietf
 	@$(MAKE) -f Makefile.kemp clean
 	@$(MAKE) -f Makefile.net-snmp clean
+	@$(MAKE) -f Makefile.nokia clean
 	@$(MAKE) -f Makefile.powercom clean
 	@$(MAKE) -f Makefile.synology clean
