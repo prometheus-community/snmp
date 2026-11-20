@@ -1,0 +1,33 @@
+# Copyright The Prometheus Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+include Makefile.curl
+
+# The upstream Vertiv URL is behind a Cloudflare bot challenge and rejects
+# automated downloads with HTTP 403. Use the Internet Archive snapshot instead.
+# Upstream: https://www.vertiv.com/globalassets/documents/software/monitoring/lgpmib-win_rev16_299461_0.zip
+LIEBERT_URL := https://web.archive.org/web/20250901082741id_/https://www.vertiv.com/globalassets/documents/software/monitoring/lgpmib-win_rev16_299461_0.zip
+
+all: liebert/.done
+
+liebert/.done:
+	@echo ">> Downloading Liebert MIBs"
+	$(eval TMP := $(shell mktemp))
+	@curl $(CURL_OPTS) -o $(TMP) "$(LIEBERT_URL)"
+	@unzip -d liebert -o -j $(TMP) LIEBERT_GP_PDU.MIB LIEBERT_GP_REG.MIB
+	@rm -v $(TMP)
+	@touch $@
+
+.PHONY: clean
+clean:
+	rm -vf liebert/*.MIB liebert/.done
